@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Comatible" content="IE-edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="http://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+    <title>Update User</title>
+</head>
+<body>
+    <section class="top">
+        <div class="container">
+            <div class="row justify-content">
+                <div class="logo"><a href="/"><img src="/images/logo.png" alt="Logo"></a></div>
+                <div class="menu-bar">
+                    <span></span>
+                </div>
+                <div class="menu-items">
+                    <ul>
+                        <li class="menu-item"><a href="/">Home</a></li>
+                        <li class="menu-item"><a href="about">About</a></li>
+                        <li class="menu-item"><a href="login">Login</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="big-image-login">
+        <div class="wrapper">
+            <form action="/updateuser" method="post">
+                <h1>Update</h1>
+                <div class="input-box">
+                    <input type="text" name="userId" value="<%= userEdit.id %>" placeholder="ID" required>
+                    <i class="bx bxs-user"></i>
+                </div>
+                <div class="input-box">
+                    <input type="text" name="user" value="<%= userEdit.user %>" placeholder="Username" required>
+                    <i class="bx bxs-user"></i>
+                </div>
+                <div class="input-box">
+                    <input type="password" name="password" value="<%= userEdit.pass %>" placeholder="Password" required>
+                    <i class="bx bxs-lock-alt"></i>
+                </div>
+                <button type="submit" class="btn">Update</button>
+            </form>
+        </div>
+    </section>
+    <section class="footer">
+        <div class="footer-bg"></div>
+        <div class="container">
+            <div class="row justify-content">
+                <div class="footer-item">
+                    <h2>Địa chỉ</h2>
+                    <p>7 Ngõ 1 Trung Văn <br>Nam Từ Liêm, Hà Nội</p>
+                </div>
+                <div class="footer-item">
+                    <h2>Giờ mở cửa</h2>
+                    <p>7:00 - 23:00<br>Tất cả các ngày trong tuần</p>
+                </div>
+                <div class="footer-item">
+                    <h2>Liên hệ</h2>
+                    <p>Phone: 0968698102 <br>Email: sangtd2005@gmail.com</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    <script src="/js/script.js"></script>
+</body>
+</html>
