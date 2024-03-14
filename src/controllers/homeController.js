@@ -11,7 +11,7 @@ const getLoginPage = (req, res) => {
     res.render('login.ejs')
 }
 const getUser = async (req, res) => {
-    if (req.session.checkLogin) {
+    if (req.session.role == 'admin') {
         res.render('user.ejs')
     } else {
         res.redirect('/login');
@@ -22,7 +22,8 @@ const postLogin = async (req, res) => {
     const password = req.body.password;
     let results = await getLogin(userName, password);
     if (results && results.length > 0) {
-        req.session.checkLogin = true;
+        let user = results[0];
+        req.session.role = Object.values(user)[Object.values(user).length - 1];
         res.redirect('/user');
     } else {
         res.redirect('/login');
