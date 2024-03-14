@@ -12,7 +12,11 @@ const getLoginPage = (req, res) => {
 }
 const getUser = async (req, res) => {
     if (req.session.role == 'admin') {
-        res.render('user.ejs')
+        return res.render('admin.ejs');
+    } else if (req.session.role == 'manager') {
+        res.render('manager.ejs');
+    } else if (req.session.role == 'shipper') {
+        res.render('shipper.ejs');
     } else {
         res.redirect('/login');
     }
