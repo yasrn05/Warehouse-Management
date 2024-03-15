@@ -1,7 +1,7 @@
 const express = require('express')
 const session = require('express-session');
 const {
-    getHomePage, getLoginPage, getAbout, getUser,
+    getHomePage, getLoginPage, getAbout, getUser, getAdminPage, getMangerPage, getShipperPage,
     postLogin, getProduct,
 
     postCreateShipper,
@@ -18,6 +18,9 @@ router.get('/', getHomePage)
 router.get('/about', getAbout)
 router.get('/login', getLoginPage)
 router.get('/user', getUser)
+router.get('/admin', getAdminPage)
+router.get('/manager', getMangerPage)
+router.get('/shipper', getShipperPage)
 router.get('/product', getProduct)
 
 router.post('/postLogin', postLogin)

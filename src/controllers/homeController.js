@@ -10,29 +10,54 @@ const getHomePage = (req, res) => {
 const getLoginPage = (req, res) => {
     res.render('login.ejs')
 }
-const getUser = async (req, res) => {
-    if (req.session.role == 'admin') {
-        return res.render('admin.ejs');
-    } else if (req.session.role == 'manager') {
-        res.render('manager.ejs');
-    } else if (req.session.role == 'shipper') {
-        res.render('shipper.ejs');
-    } else {
-        res.redirect('/login');
-    }
-}
 const postLogin = async (req, res) => {
     const userName = req.body.userName;
     const password = req.body.password;
     let results = await getLogin(userName, password);
     if (results && results.length > 0) {
         let user = results[0];
+        req.session.user = user;
         req.session.role = Object.values(user)[Object.values(user).length - 1];
         res.redirect('/user');
     } else {
         res.redirect('/login');
     }
 }
+const getUser = async (req, res) => {
+    if (req.session.role == 'admin') {
+        res.redirect('/admin');
+    } else if (req.session.role == 'manager') {
+        res.redirect('/manager');
+    } else if (req.session.role == 'shipper') {
+        res.redirect('/shipper');
+    } else {
+        res.redirect('/login');
+    }
+}
+const getAdminPage = (req,res) => {
+    if (req.session.role == 'admin') {
+        res.render('admin.ejs');
+    } else {
+        res.redirect('/');
+    }
+}
+const getMangerPage = (req,res) => {
+    if (req.session.role == 'manager') {
+        res.render('manager.ejs');
+    } else {
+        res.redirect('/');
+    }
+}
+const getShipperPage = (req,res) => {
+    if (req.session.role == 'shipper') {
+        res.render('shipper.ejs');
+    } else {
+        res.redirect('/');
+    }
+}
+
+
+
 const getProduct = async () => {
     let results = await getProductList();
     return res.render('product.ejs', {listProduct: results})
@@ -76,7 +101,7 @@ const postRemoveUser = async (req, res) => {
 
 
 module.exports = {
-    getHomePage, getLoginPage, getUser,
+    getHomePage, getLoginPage, getUser, getAdminPage, getMangerPage, getShipperPage,
     postLogin,
     getProduct,
 
