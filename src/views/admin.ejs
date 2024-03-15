@@ -2,10 +2,93 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Comatible" content="IE-edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="http://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/css/style.css">
     <title>Admin</title>
 </head>
 <body>
-    
+    <section class="top">
+        <div class="container">
+            <div class="row justify-content">
+                <div class="logo"><a href="/"><img src="/images/logo.png" alt="Logo"></a></div>
+                <div class="menu-bar">
+                    <span></span>
+                </div>
+                <div class="menu-items">
+                    <ul>
+                        <li class="menu-item">
+                            <i class='bx bxs-home'></i>
+                            <a href="/">Home</a>
+                        </li>
+                        <li class="menu-item">
+                            <i class='bx bx-user'></i>
+                            <a href="/login">Login</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="big-image">
+        <div class="big-image-content">
+            <main class="table" id="customers_table">
+                <section class="table__header">
+                    <a href=""><button class="btn-create"></button></a>
+                    <h1>Welcome: <%= user.name%></h1>
+                    <div class="input-group">
+                        <input type="search" placeholder="Search Data...">
+                        <img src="images/search.png" alt="">
+                    </div>
+                    <div class="export__file">
+                        <label for="export-file" class="export__file-btn" title="Export File"></label>
+                        <input type="checkbox" id="export-file">
+                        <div class="export__file-options">
+                            <label for="export-file" id="toPDF">PDF</label>
+                        </div>
+                    </div>
+                </section>
+                <section class="table__body">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th> Id <span class="icon-arrow">&UpArrow;</span></th>
+                                <th> Name <span class="icon-arrow">&UpArrow;</span></th>
+                                <th> Phone <span class="icon-arrow">&UpArrow;</span></th>
+                                <th> Email <span class="icon-arrow">&UpArrow;</span></th>
+                                <th> Address <span class="icon-arrow">&UpArrow;</span></th>
+                                <th> Oder Number <span class="icon-arrow">&UpArrow;</span></th>
+                                <th> Role <span class="icon-arrow">&UpArrow;</span></th>
+                                <th> User Name <span class="icon-arrow">&UpArrow;</span></th>
+                                <th> Password <span class="icon-arrow">&UpArrow;</span></th>
+                                <th> Actions </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td> 1 </td>
+                                <td> tran dang sang </td>
+                                <td> 0968698102 </td>
+                                <td> sangtd2005@gmail.com </td>
+                                <td> Phung Khoang, Nam Tu Liem, Ha Noi </td>
+                                <td> 0 </td>
+                                <td> Admin </td>
+                                <td> sangtd </td>
+                                <td> 123456 </td>
+                                <td class="action">
+                                    <a href="update/<%= user.id %>"><button class="btn-edit"></button></a>
+                                    <form action="/deleteuser/<%= user.id %>" method="post">
+                                        <button class="btn-delete"></button>
+                                    </form>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </section>
+            </main>
+        </div>
+    </section>
+    <script src="/js/script.js"></script>
 </body>
 </html>

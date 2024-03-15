@@ -8,7 +8,11 @@ const getHomePage = (req, res) => {
     res.render('home.ejs')
 }
 const getLoginPage = (req, res) => {
-    res.render('login.ejs')
+    if (req.session.user) {
+        res.redirect('/user')
+    } else {
+        res.render('login.ejs')
+    }
 }
 const postLogin = async (req, res) => {
     const userName = req.body.userName;
@@ -36,21 +40,21 @@ const getUser = async (req, res) => {
 }
 const getAdminPage = (req,res) => {
     if (req.session.role == 'admin') {
-        res.render('admin.ejs');
+        res.render('admin.ejs', {user : req.session.user});
     } else {
         res.redirect('/');
     }
 }
 const getMangerPage = (req,res) => {
     if (req.session.role == 'manager') {
-        res.render('manager.ejs');
+        res.render('manager.ejs', {user : req.session.user});
     } else {
         res.redirect('/');
     }
 }
 const getShipperPage = (req,res) => {
     if (req.session.role == 'shipper') {
-        res.render('shipper.ejs');
+        res.render('shipper.ejs', {user : req.session.user});
     } else {
         res.redirect('/');
     }
