@@ -14,6 +14,14 @@ const getListUsers = async () => {
         );
     return results;
 }
+const createUser = async (name, phone, email, address, role, userName, password) => {
+    let [results, fields] = await connection.query(
+        `INSERT INTO users 
+        (name, phone, email, address, role, userName, password) 
+        VALUES (?, ?, ?, ?, ?, ?, ?)`
+        ,[name, phone, email, address, role, userName, password]);
+}
+
 const getUserById = async (userId) => {
     let [results, fields] = await connection.query(
         'select * from users where id = ?'
@@ -54,6 +62,7 @@ const deleteUserById = async (id) => {
 }
 
 module.exports = {
-    getLogin, getListUsers, getUserById, editUserById,
+    getLogin, getListUsers, createUser,
+    getUserById, editUserById,
     getACCShipper, updateUserById, deleteUserById
 }

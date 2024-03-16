@@ -55,16 +55,21 @@ table_headings.forEach((head, i) => {
     }
 })
 
-
 function sortTable(column, sort_asc) {
     [...table_rows].sort((a, b) => {
-        let first_row = a.querySelectorAll('td')[column].textContent.toLowerCase(),
-            second_row = b.querySelectorAll('td')[column].textContent.toLowerCase();
-
-        return sort_asc ? (first_row < second_row ? 1 : -1) : (first_row < second_row ? -1 : 1);
+        let first_row = a.querySelectorAll('td')[column].textContent,
+            second_row = b.querySelectorAll('td')[column].textContent;
+        // Kiểm tra nếu cả hai giá trị đều là số
+        if (!isNaN(first_row) && !isNaN(second_row)) {
+            return sort_asc ? parseFloat(first_row) - parseFloat(second_row) : parseFloat(second_row) - parseFloat(first_row);
+        } else { // Nếu ít nhất một trong hai giá trị không phải là số
+            // Sắp xếp theo thứ tự chữ cái
+            return sort_asc ? first_row.localeCompare(second_row) : second_row.localeCompare(first_row);
+        }
     })
         .map(sorted_row => document.querySelector('tbody').appendChild(sorted_row));
 }
+
 
 // 3. Converting HTML table to PDF
 
@@ -91,9 +96,12 @@ pdf_btn.onclick = () => {
     toPDF(customers_table);
 }
 
-document.querySelector(".big-image-content-btn").addEventListener("click", function() { 
-    document.querySelector(".wrapper").style.display= "flex";
+
+
+
+document.querySelector(".btn-create").addEventListener("click", function() { 
+    document.querySelector(".wrapper2").style.display= "flex";
 })
 document.querySelector(".close").addEventListener("click", function() {
-    document.querySelector(".wrapper").style.display = "none";
+    document.querySelector(".wrapper2").style.display = "none";
 });
