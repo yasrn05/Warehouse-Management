@@ -1,6 +1,7 @@
 const connection = require('../config/database');
 const {
-    getLogin, getProductList,
+    getLogin, getListUsers, getUserById, editUserById,
+    getProductList,
     getACCShipper, updateUserById, deleteUserById
 } = require('../services/CRUDService');
 
@@ -29,7 +30,7 @@ const postLogin = async (req, res) => {
 }
 const getUser = async (req, res) => {
     if (req.session.role == 'admin') {
-        res.redirect('/admin');
+        res.redirect('/adminUsers');
     } else if (req.session.role == 'manager') {
         res.redirect('/manager');
     } else if (req.session.role == 'shipper') {
@@ -38,28 +39,54 @@ const getUser = async (req, res) => {
         res.redirect('/login');
     }
 }
-const getAdminPage = (req,res) => {
+const getAdminUsersPage = async (req,res) => {
     if (req.session.role == 'admin') {
-        res.render('admin.ejs', {user : req.session.user});
+        let results = await getListUsers();
+        return res.render('adminUsers.ejs', {
+            admin : req.session.user,
+            listUser : results
+        });
     } else {
-        res.redirect('/');
+        res.redirect('/login');
     }
 }
 const getMangerPage = (req,res) => {
     if (req.session.role == 'manager') {
         res.render('manager.ejs', {user : req.session.user});
     } else {
-        res.redirect('/');
+        res.redirect('/login');
     }
 }
 const getShipperPage = (req,res) => {
     if (req.session.role == 'shipper') {
         res.render('shipper.ejs', {user : req.session.user});
     } else {
-        res.redirect('/');
+        res.redirect('/login');
     }
 }
-
+const getLogout = (req,res) => {
+    req.session.role = false;
+    req.session.user = false;
+    res.redirect('/');
+}
+const getEditUser = async (req, res) => {
+    const userId = req.params.id;
+    results = await getUserById(userId);
+    let user = results && results.length > 0 ? results[0] : {};
+    res.render('editUser.ejs', {userEdit : user});
+}
+const postEditUser = async (req,res) => {
+    let id = req.body.id;
+    let name = req.body.name;
+    let phone = req.body.phone;
+    let email = req.body.email;
+    let address = req.body.address;
+    let role = req.body.role;
+    let userName = req.body.userName;
+    let password = req.body.password;
+    await editUserById(id, name, phone, email, address, role, userName, password);
+    res.redirect('/adminUsers');
+}
 
 
 const getProduct = async () => {
@@ -105,8 +132,8 @@ const postRemoveUser = async (req, res) => {
 
 
 module.exports = {
-    getHomePage, getLoginPage, getUser, getAdminPage, getMangerPage, getShipperPage,
-    postLogin,
+    getHomePage, getLoginPage, getUser, getAdminUsersPage, getMangerPage, getShipperPage,
+    postLogin, getLogout, getEditUser, postEditUser,
     getProduct,
 
     postCreateShipper, getUpdate, postUpdateUser,

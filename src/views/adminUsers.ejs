@@ -23,8 +23,20 @@
                             <a href="/">Home</a>
                         </li>
                         <li class="menu-item">
-                            <i class='bx bx-user'></i>
-                            <a href="/login">Login</a>
+                            <i class='bx bxs-user-account'></i>
+                            <a href="/adminUsers">Users</a>
+                        </li>
+                        <li class="menu-item">
+                            <i class='bx bx-cart'></i>
+                            <a href="/adminCustomers">Customer</a>
+                        </li>
+                        <li class="menu-item">
+                            <i class='bx bx-package'></i>
+                            <a href="/adminSuppliers">Suppliers</a>
+                        </li>
+                        <li class="menu-item">
+                            <i class='bx bx-log-out' ></i>
+                            <a href="/logout">Logout</a>
                         </li>
                     </ul>
                 </div>
@@ -36,7 +48,7 @@
             <main class="table" id="customers_table">
                 <section class="table__header">
                     <a href=""><button class="btn-create"></button></a>
-                    <h1>Welcome: <%= user.name%></h1>
+                    <h1>Welcome: <%= admin.name%> - <%= admin.id%></h1>
                     <div class="input-group">
                         <input type="search" placeholder="Search Data...">
                         <img src="images/search.png" alt="">
@@ -66,23 +78,25 @@
                             </tr>
                         </thead>
                         <tbody>
+                        <% listUser.forEach(function(user) { %>
                             <tr>
-                                <td> 1 </td>
-                                <td> tran dang sang </td>
-                                <td> 0968698102 </td>
-                                <td> sangtd2005@gmail.com </td>
-                                <td> Phung Khoang, Nam Tu Liem, Ha Noi </td>
-                                <td> 0 </td>
-                                <td> Admin </td>
-                                <td> sangtd </td>
-                                <td> 123456 </td>
-                                <td class="action">
-                                    <a href="update/<%= user.id %>"><button class="btn-edit"></button></a>
+                                <td><%= user.id %></td>
+                                <td><%= user.name %></td>
+                                <td><%= user.phone %></td>
+                                <td><%= user.email %></td>
+                                <td><%= user.address %></td>
+                                <td>0</td>
+                                <td><%= user.role %></td>
+                                <td><%= user.userName %></td>
+                                <td><%= user.password %></td>
+                                <td class="actions">
+                                    <a href="/editUser/<%= user.id %>"><button class="btn-edit"></button></a>
                                     <form action="/deleteuser/<%= user.id %>" method="post">
                                         <button class="btn-delete"></button>
                                     </form>
                                 </td>
                             </tr>
+                            <% }); %>   
                         </tbody>
                     </table>
                 </section>

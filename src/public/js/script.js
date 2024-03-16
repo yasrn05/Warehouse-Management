@@ -10,8 +10,6 @@ window.addEventListener("scroll",function() {
     else{toP.classList.remove("active")}
 })
 
-
-
 const search = document.querySelector('.input-group input'),
     table_rows = document.querySelectorAll('tbody tr'),
     table_headings = document.querySelectorAll('thead th');
@@ -24,13 +22,18 @@ function searchTable() {
         let table_data = row.textContent.toLowerCase(),
             search_data = search.value.toLowerCase();
 
-        row.classList.toggle('hide', table_data.indexOf(search_data) < 0);
-    })
+        if (table_data.indexOf(search_data) < 0) {
+            row.style.display = 'none';
+        } else {
+            row.style.display = '';
+        }
+    });
 
-    document.querySelectorAll('tbody tr:not(.hide)').forEach((visible_row, i) => {
+    document.querySelectorAll('tbody tr:not([style="display: none;"])').forEach((visible_row, i) => {
         visible_row.style.backgroundColor = (i % 2 == 0) ? 'transparent' : '#0000000b';
     });
 }
+
 
 // 2. Sorting | Ordering data of HTML table
 
@@ -88,3 +91,9 @@ pdf_btn.onclick = () => {
     toPDF(customers_table);
 }
 
+document.querySelector(".big-image-content-btn").addEventListener("click", function() { 
+    document.querySelector(".wrapper").style.display= "flex";
+})
+document.querySelector(".close").addEventListener("click", function() {
+    document.querySelector(".wrapper").style.display = "none";
+});
