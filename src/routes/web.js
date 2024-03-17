@@ -1,13 +1,11 @@
 const express = require('express')
 const session = require('express-session');
 const {
-    getHomePage, getLoginPage, getAbout, getUser, getAdminUsersPage, getMangerPage, getShipperPage,
-    getLogout, postCreateUser,
-    postEditUser, getEditUser,
-    postLogin, getProduct,
+    getHomePage, getLoginPage, postLogin, getUser, getLogout,
+    getAdminUsersPage, postCreateUser, postEditUser, postDeleteUser,
 
-    postCreateShipper,
-    getUpdate, postUpdateUser, postDeleteUser, postRemoveUser
+    getMangerPage,
+    getProduct
 } = require('../controllers/homeController')
 const router = express.Router()
 router.use(session({
@@ -17,27 +15,18 @@ router.use(session({
 }));
 
 router.get('/', getHomePage)
-router.get('/about', getAbout)
 router.get('/login', getLoginPage)
+router.post('/postLogin', postLogin)
 router.get('/user', getUser)
+router.get('/logout', getLogout)
+
 router.get('/adminUsers', getAdminUsersPage)
 router.post('/postCreateUser', postCreateUser)
-
-
-router.get('/editUser/:id', getEditUser)
 router.post('/postEditUser', postEditUser)
+router.post('/postDeleteUser/:id', postDeleteUser)
 
 router.get('/manager', getMangerPage)
-router.get('/shipper', getShipperPage)
-router.get('/logout', getLogout)
-router.post('/postLogin', postLogin)
 
 router.get('/product', getProduct)
-
-router.get('/update/:id', getUpdate)
-router.post('/createshipper', postCreateShipper)
-router.post('/updateuser', postUpdateUser)
-router.post('/deleteuser/:id', postDeleteUser)
-router.post('/deleteuser', postRemoveUser)
 
 module.exports = router;

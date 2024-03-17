@@ -1,9 +1,9 @@
 const connection = require('../config/database');
 const {
     getLogin, getListUsers, createUser,
-    getUserById, editUserById,
+    editUserById,
     getProductList,
-    getACCShipper, updateUserById, deleteUserById
+    deleteUserById
 } = require('../services/CRUDService');
 
 const getHomePage = (req, res) => {
@@ -67,24 +67,21 @@ const postCreateUser = async (req, res) => {
     await createUser(name, phone, email, address, role, userName, password);
     res.redirect('/adminUsers');
 }
-
-
-const getEditUser = async (req, res) => {
-    const userId = req.params.id;
-    results = await getUserById(userId);
-    let user = results && results.length > 0 ? results[0] : {};
-    res.render('editUser.ejs', {userEdit : user});
-}
 const postEditUser = async (req,res) => {
-    let id = req.body.id;
-    let name = req.body.name;
-    let phone = req.body.phone;
-    let email = req.body.email;
-    let address = req.body.address;
-    let role = req.body.role;
-    let userName = req.body.userName;
-    let password = req.body.password;
+    let id = req.body.idEdit;
+    let name = req.body.nameEdit;
+    let phone = req.body.phoneEdit;
+    let email = req.body.emailEdit;
+    let address = req.body.addressEdit;
+    let role = req.body.roleEdit;
+    let userName = req.body.userNameEdit;
+    let password = req.body.passwordEdit;
     await editUserById(id, name, phone, email, address, role, userName, password);
+    res.redirect('/adminUsers');
+}
+const postDeleteUser = async (req, res) => {
+    const id = req.params.id;
+    await deleteUserById(id);
     res.redirect('/adminUsers');
 }
 const getMangerPage = (req,res) => {
@@ -94,62 +91,25 @@ const getMangerPage = (req,res) => {
         res.redirect('/login');
     }
 }
-const getShipperPage = (req,res) => {
-    if (req.session.role == 'shipper') {
-        res.render('shipper.ejs', {user : req.session.user});
-    } else {
-        res.redirect('/login');
-    }
-}
 
 const getProduct = async () => {
     let results = await getProductList();
     return res.render('product.ejs', {listProduct: results})
 }
-const getAbout = async (req, res) => {
-    let results = await getACCShipper();
-    return res.render('about.ejs', {listUser: results} )
-}
-const getUpdate = async (req, res) => {
-    const userId = req.params.id;
-    let [results, fields] = await connection.query('select * from ACC_Shipper where id = ?', [userId]);
-    let user = results && results.length > 0 ? results[0] : {};
-    res.render('update.ejs', {userEdit : user});
-}
-const postCreateShipper = async (req, res) => {
-    let user = req.body.user;
-    let pass = req.body.password;
-    let [results, fields] = await connection.query(
-        `INSERT INTO ACC_Shipper (user, pass) VALUES (?, ?)`,[user, pass]);
-    res.redirect('/about');
-}
-const postUpdateUser= async (req, res) => {
-    let user = req.body.user;
-    let pass = req.body.password;
-    let userId = req.body.userId;
-    await updateUserById(user, pass, userId);
-    res.redirect('/about');
-}
 
-const postDeleteUser = async (req, res) => {
-    const userId = req.params.id;
-    let [results, fields] = await connection.query('select * from ACC_Shipper where id = ?', [userId]);
-    let user = results && results.length > 0 ? results[0] : {};
-    res.render('delete.ejs', {userEdit : user})
-}
-const postRemoveUser = async (req, res) => {
-    const id = req.body.userId;
-    await deleteUserById(id);
-    res.redirect('/about');
-}
+// const postDeleteUser = async (req, res) => {
+//     const userId = req.params.id;
+//     let [results, fields] = await connection.query('select * from ACC_Shipper where id = ?', [userId]);
+//     let user = results && results.length > 0 ? results[0] : {};
+//     res.render('delete.ejs', {userEdit : user})
+// }
+
 
 
 module.exports = {
-    getHomePage, getLoginPage, getUser, getAdminUsersPage, getMangerPage, getShipperPage,
-    postLogin, getLogout, postCreateUser,
-    getEditUser, postEditUser,
-    getProduct,
-
-    postCreateShipper, getUpdate, postUpdateUser,
-    updateUserById, postDeleteUser, postRemoveUser, getAbout
+    getHomePage, getLoginPage, postLogin, getUser, getLogout, 
+    getAdminUsersPage, postCreateUser, postEditUser, postDeleteUser,
+    
+    
+    getProduct, getMangerPage
 }

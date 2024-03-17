@@ -21,13 +21,6 @@ const createUser = async (name, phone, email, address, role, userName, password)
         VALUES (?, ?, ?, ?, ?, ?, ?)`
         ,[name, phone, email, address, role, userName, password]);
 }
-
-const getUserById = async (userId) => {
-    let [results, fields] = await connection.query(
-        'select * from users where id = ?'
-        , [userId]);
-    return results;
-}
 const editUserById = async(id, name, phone, email, address, role, userName, password) => {
     let [results, fields] = await connection.query(
         `UPDATE users
@@ -35,6 +28,11 @@ const editUserById = async(id, name, phone, email, address, role, userName, pass
             userName = ?, password = ?
         WHERE id = ?
         `,[name, phone, email, address, role, userName, password, id]);
+}
+const deleteUserById = async (id) => {
+    let [results, fields] = await connection.query(
+        'DELETE FROM users WHERE id = ?', [id]
+    );
 }
 
 
@@ -44,25 +42,11 @@ const getProductList = async () => {
     );
     return results;
 }
-const getACCShipper = async () => {
-    let [results, fields] = await connection.query('select * from ACC_Shipper');
-    return results;
-}
-const updateUserById = async (user, pass, userId) => {
-    let [results, fields] = await connection.query(
-        `UPDATE ACC_Shipper
-        SET user = ?, pass = ?
-        WHERE id = ?
-        `,[user, pass, userId]);
-}
-const deleteUserById = async (id) => {
-    let [results, fields] = await connection.query(
-        'DELETE FROM ACC_Shipper WHERE id = ?', [id]
-    );
-}
+
+
 
 module.exports = {
     getLogin, getListUsers, createUser,
-    getUserById, editUserById,
-    getACCShipper, updateUserById, deleteUserById
+    editUserById,
+    deleteUserById
 }

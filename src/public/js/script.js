@@ -96,12 +96,21 @@ pdf_btn.onclick = () => {
     toPDF(customers_table);
 }
 
-
-
-
+// Create
 document.querySelector(".btn-create").addEventListener("click", function() { 
     document.querySelector(".wrapper2").style.display= "flex";
 })
 document.querySelector(".close").addEventListener("click", function() {
     document.querySelector(".wrapper2").style.display = "none";
+});
+// Edit
+var editButtons = document.querySelectorAll(".btn-edit");
+editButtons.forEach(function(button) {
+    button.addEventListener("click", function() {
+        var id = parseInt(this.getAttribute("data-id"));
+        document.getElementById("edit" + id).style.display = "flex";
+        document.getElementById("close" + id).addEventListener("click", function() { 
+            document.getElementById("edit" + id).style.display = "none";
+        })
+    });
 });
