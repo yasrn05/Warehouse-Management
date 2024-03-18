@@ -33,10 +33,7 @@ function searchTable() {
         visible_row.style.backgroundColor = (i % 2 == 0) ? 'transparent' : '#0000000b';
     });
 }
-
-
 // 2. Sorting | Ordering data of HTML table
-
 table_headings.forEach((head, i) => {
     let sort_asc = true;
     head.onclick = () => {
@@ -54,7 +51,6 @@ table_headings.forEach((head, i) => {
         sortTable(i, sort_asc);
     }
 })
-
 function sortTable(column, sort_asc) {
     [...table_rows].sort((a, b) => {
         let first_row = a.querySelectorAll('td')[column].textContent,
@@ -69,33 +65,6 @@ function sortTable(column, sort_asc) {
     })
         .map(sorted_row => document.querySelector('tbody').appendChild(sorted_row));
 }
-
-
-// 3. Converting HTML table to PDF
-
-const pdf_btn = document.querySelector('#toPDF');
-const customers_table = document.querySelector('#customers_table');
-
-
-const toPDF = function (customers_table) {
-    const html_code = `
-    <!DOCTYPE html>
-    <link rel="stylesheet" type="text/css" href="../css/style.css">
-    <main class="table" id="customers_table">${customers_table.innerHTML}</main>`;
-
-    const new_window = window.open();
-     new_window.document.write(html_code);
-
-    setTimeout(() => {
-        new_window.print();
-        new_window.close();
-    }, 400);
-}
-
-pdf_btn.onclick = () => {
-    toPDF(customers_table);
-}
-
 // Create
 document.querySelector(".btn-create").addEventListener("click", function() { 
     document.querySelector(".wrapper2").style.display= "flex";

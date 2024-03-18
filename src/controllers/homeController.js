@@ -1,9 +1,8 @@
 const connection = require('../config/database');
 const {
-    getLogin, getListUsers, createUser,
-    editUserById,
-    getProductList,
-    deleteUserById
+    getLogin, 
+    getListUsers, createUser, editUserById, deleteUserById,
+    getListPartners, createPartner, editPartnerById, deletePartnerById
 } = require('../services/CRUDService');
 
 const getHomePage = (req, res) => {
@@ -40,6 +39,12 @@ const getUser = async (req, res) => {
         res.redirect('/login');
     }
 }
+const getLogout = (req,res) => {
+    req.session.role = false;
+    req.session.user = false;
+    res.redirect('/');
+}
+
 const getAdminUsersPage = async (req,res) => {
     if (req.session.role == 'admin') {
         let results = await getListUsers();
@@ -50,11 +55,6 @@ const getAdminUsersPage = async (req,res) => {
     } else {
         res.redirect('/login');
     }
-}
-const getLogout = (req,res) => {
-    req.session.role = false;
-    req.session.user = false;
-    res.redirect('/');
 }
 const postCreateUser = async (req, res) => {
     let name = req.body.nameCreate;
@@ -84,6 +84,42 @@ const postDeleteUser = async (req, res) => {
     await deleteUserById(id);
     res.redirect('/adminUsers');
 }
+const getAdminPartnersPage = async (req,res) => {
+    if (req.session.role == 'admin') {
+        let results = await getListPartners();
+        return res.render('adminPartners.ejs', {
+            admin : req.session.user,
+            listPartner : results
+        });
+    } else {
+        res.redirect('/login');
+    }
+}
+const postCreatePartner = async (req, res) => {
+    let name = req.body.nameCreate;
+    let phone = req.body.phoneCreate;
+    let email = req.body.emailCreate;
+    let address = req.body.addressCreate;
+    let role = req.body.roleCreate;
+    await createPartner(name, phone, email, address, role);
+    res.redirect('/adminPartners');
+}
+const postEditPartner = async (req,res) => {
+    let id = req.body.idEdit;
+    let name = req.body.nameEdit;
+    let phone = req.body.phoneEdit;
+    let email = req.body.emailEdit;
+    let address = req.body.addressEdit;
+    let role = req.body.roleEdit;
+    await editPartnerById(id, name, phone, email, address, role);
+    res.redirect('/adminPartners');
+}
+const postDeletePartner = async (req, res) => {
+    const id = req.params.id;
+    await deletePartnerById(id);
+    res.redirect('/adminPartners');
+}
+
 const getMangerPage = (req,res) => {
     if (req.session.role == 'manager') {
         res.render('manager.ejs', {user : req.session.user});
@@ -91,25 +127,15 @@ const getMangerPage = (req,res) => {
         res.redirect('/login');
     }
 }
-
 const getProduct = async () => {
     let results = await getProductList();
     return res.render('product.ejs', {listProduct: results})
 }
 
-// const postDeleteUser = async (req, res) => {
-//     const userId = req.params.id;
-//     let [results, fields] = await connection.query('select * from ACC_Shipper where id = ?', [userId]);
-//     let user = results && results.length > 0 ? results[0] : {};
-//     res.render('delete.ejs', {userEdit : user})
-// }
-
-
-
 module.exports = {
     getHomePage, getLoginPage, postLogin, getUser, getLogout, 
     getAdminUsersPage, postCreateUser, postEditUser, postDeleteUser,
-    
+    getAdminPartnersPage, postCreatePartner, postEditPartner, postDeletePartner,
     
     getProduct, getMangerPage
 }
