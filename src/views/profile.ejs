@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Comatible" content="IE-edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="http://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+    <title>Profile</title>
+</head>
+<body>
+    <section class="top">
+        <div class="container">
+            <div class="row justify-content">
+                <div class="logo"><a href="/"><img src="/images/logo.png" alt="Logo"></a></div>
+                <div class="menu-bar"></div>          
+            </div>
+        </div>
+    </section>
+    <section class="big-image-login">
+        <div class="wrapper">
+            <form action="/postEditUser" method="post" class="editForm">
+                <h1>Edit</h1>
+                <div class="input-box d-none">
+                    <input type="text" name="idEdit" value="<%= user.id %>" placeholder="Id" required>
+                </div>
+                <div class="input-box">
+                    <input type="text" name="nameEdit" value="<%= user.name %>" placeholder="Name" required>
+                </div>
+                <div class="input-box">
+                    <input type="number" name="phoneEdit" value="<%= user.phone %>" placeholder="Phone" required>
+                </div>
+                <div class="input-box">
+                    <input type="text" name="emailEdit" value="<%= user.email %>" placeholder="Email" required>
+                </div>
+                <div class="input-box">
+                    <input type="text" name="addressEdit" value="<%= user.address %>" placeholder="Address" required>
+                </div>
+                <div class="input-box d-none">
+                    <input type="text" name="roleEdit" value="<%= user.role %>" placeholder="Role" required>
+                </div>
+                <div class="input-box d-none">
+                    <input type="text" name="userNameEdit" value="<%= user.userName %>" placeholder="User Name" required>
+                </div>
+                <div class="input-box">
+                    <input type="password" name="passwordEdit" value="<%= user.password %>" placeholder="Password" required>
+                </div>
+                <button type="submit" class="btn">Update and Logout</button>
+            </form>
+        </div>
+    </section>
+    <script src="/js/script.js"></script>
+</body>
+</html>

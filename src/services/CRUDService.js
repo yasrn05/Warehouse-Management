@@ -100,10 +100,8 @@ const deleteProductById = async (id) => {
         , [id]
     );
 }
-const getListInputs = async () => {
+const getListInputs = async (idManager) => {
     let [results, fields] = await connection.query(
-        // `select * 
-        // from inputs`
         `SELECT
 	        inputs.id AS 'id',
             inputs.date AS 'date',
@@ -118,10 +116,11 @@ const getListInputs = async () => {
         FROM inputs
         JOIN users ON inputs.idShipper = users.id
         JOIN partners ON inputs.idSupplier = partners.id
+        WHERE inputs.idManager = ?
         GROUP BY
             inputs.id, inputs.date, inputs.address, inputs.status, inputs.idShipper, inputs.idSupplier,
             users.name, users.phone, partners.name, partners.phone`
-        );
+        ,[idManager]);
     return results;
 }
 const createInput = async (dateCreate, idShipperCreate, idManagerCreate, idSupplierCreate, addressCreate, statusCreate) => {
@@ -139,11 +138,14 @@ const editInputById = async(id, idShipper, idSupplier, address, status) => {
         WHERE id = ?
         `,[idShipper, idSupplier, address, status, id]);
 }
+const getInfoInput = async () => {
+
+}
 
 module.exports = {
     getLogin, 
     getListUsers, createUser, editUserById, deleteUserById,
     getListPartners, createPartner, editPartnerById, deletePartnerById,
     getListProducts, createProduct, editProductById, deleteProductById,
-    getListInputs, createInput, editInputById
+    getListInputs, createInput, editInputById, getInfoInput
 }

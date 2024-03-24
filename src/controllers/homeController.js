@@ -4,7 +4,7 @@ const {
     getListUsers, createUser, editUserById, deleteUserById,
     getListPartners, createPartner, editPartnerById, deletePartnerById,
     getListProducts, createProduct, editProductById, deleteProductById,
-    getListInputs, createInput, editInputById
+    getListInputs, createInput, editInputById, getInfoInput
 } = require('../services/CRUDService');
 
 const getHomePage = (req, res) => {
@@ -24,7 +24,7 @@ const postLogin = async (req, res) => {
     if (results && results.length > 0) {
         let user = results[0];
         req.session.user = user;
-        req.session.role = Object.values(user)[Object.values(user).length - 1];
+        req.session.role = user.role;
         res.redirect('/user');
     } else {
         res.redirect('/login');
@@ -37,6 +37,15 @@ const getUser = async (req, res) => {
         res.redirect('/managerProducts');
     } else if (req.session.role == 'shipper') {
         res.redirect('/shipper');
+    } else {
+        res.redirect('/login');
+    }
+}
+const getProfile = (req, res) => {
+    if (req.session.role) {
+        return res.render('profile.ejs', {
+            user : req.session.user
+        });
     } else {
         res.redirect('/login');
     }
@@ -79,7 +88,13 @@ const postEditUser = async (req,res) => {
     let userName = req.body.userNameEdit;
     let password = req.body.passwordEdit;
     await editUserById(id, name, phone, email, address, role, userName, password);
-    res.redirect('/adminUsers');
+    if (req.session.role == 'admin') {
+        res.redirect('/adminUsers');
+    } else if (req.session.role == 'manager') {
+        res.redirect('/logout');
+    } else if (req.session.role == 'shipper') {
+        res.redirect('/logout');
+    }
 }
 const postDeleteUser = async (req, res) => {
     const id = req.params.id;
@@ -159,7 +174,8 @@ const postDeleteProduct = async (req, res) => {
 }
 const getMangerInputsPage = async (req,res) => {
     if (req.session.role == 'manager') {
-        let results = await getListInputs();
+        const idManager = req.params.id;
+        let results = await getListInputs(idManager);
         return res.render('managerInputs.ejs', {
             manager : req.session.user,
             listInputs : results
@@ -176,7 +192,8 @@ const postCreateInput = async (req, res) => {
     let addressCreate = req.body.addressCreate;
     let statusCreate = req.body.statusCreate;
     await createInput(dateCreate, idShipperCreate, idManagerCreate, idSupplierCreate, addressCreate, statusCreate);
-    res.redirect('/managerInputs');
+    let idManager = req.session.user.id;
+    res.redirect('/managerInputs/' + idManager);
 }
 const postEditInput = async (req,res) => {
     let id = req.body.idEdit;
@@ -185,13 +202,26 @@ const postEditInput = async (req,res) => {
     let address = req.body.addressEdit;
     let status = req.body.statusEdit;
     await editInputById(id, idShipper, idSupplier, address, status);
-    res.redirect('/managerInputs');
+    let idManager = req.session.user.id;
+    res.redirect('/managerInputs/' + idManager);
+}
+const getManagerInfoInputPage = async (req, res) => {
+    if (req.session.role == 'manager') {
+        const idInput = req.params.id;
+        let results = await getInfoInput(idInput);
+        return res.render('managerInfoInput.ejs', {
+            manager : req.session.user,
+            infoInput : results
+        });
+    } else {
+        res.redirect('/login');
+    }
 }
 
 module.exports = {
-    getHomePage, getLoginPage, postLogin, getUser, getLogout, 
+    getHomePage, getLoginPage, postLogin, getUser, getProfile, getLogout, 
     getAdminUsersPage, postCreateUser, postEditUser, postDeleteUser,
     getAdminPartnersPage, postCreatePartner, postEditPartner, postDeletePartner,
     getMangerProductsPage, postCreateProduct, postEditProduct, postDeleteProduct,
-    getMangerInputsPage, postCreateInput, postEditInput
+    getMangerInputsPage, postCreateInput, postEditInput, getManagerInfoInputPage
 }

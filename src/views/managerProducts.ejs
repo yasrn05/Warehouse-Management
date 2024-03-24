@@ -23,16 +23,20 @@
                             <a href="/">Home</a>
                         </li>
                         <li class="menu-item">
+                            <i class='bx bx-user-circle' ></i>
+                            <a href="/profile">Profile</a>
+                        </li>
+                        <li class="menu-item">
                             <i class='bx bx-package' ></i>
                             <a href="/managerProducts">Products</a>
                         </li>
                         <li class="menu-item">
                             <i class='bx bx-archive-in'></i>
-                            <a href="/managerInputs">Inputs</a>
+                            <a href="/managerInputs/<%= manager.id%>">Inputs</a>
                         </li>
                         <li class="menu-item">
                             <i class='bx bx-archive-out' ></i>
-                            <a href="/managerOutputs">Outputs</a>
+                            <a href="/managerOutputs/<%= manager.id%>">Outputs</a>
                         </li>
                         <li class="menu-item">
                             <i class='bx bx-log-out' ></i>
