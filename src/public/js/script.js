@@ -83,3 +83,16 @@ editButtons.forEach(function(button) {
         })
     });
 });
+// DateNow
+function postDateNow() {
+    var createDateNow = new Date();
+    var date = createDateNow.getDate();
+    var month = createDateNow.getMonth() + 1;
+    var year = createDateNow.getFullYear();
+    var hours = createDateNow.getHours();
+    var minutes = createDateNow.getMinutes();
+    var seconds = createDateNow.getSeconds();
+    var dateNow = year + '-' + month + '-' + date + ' ' + hours + ':' + minutes + ':' + seconds;
+    document.getElementById("dateNow").value = dateNow;
+}
+document.getElementById('btn-create').addEventListener('click', postDateNow);

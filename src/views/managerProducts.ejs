@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="http://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
     <link rel="stylesheet" href="/css/style.css">
-    <title>Admin</title>
+    <title>Manager</title>
 </head>
 <body>
     <section class="top">
@@ -23,16 +23,16 @@
                             <a href="/">Home</a>
                         </li>
                         <li class="menu-item">
-                            <i class='bx bxs-user-account'></i>
-                            <a href="/adminUsers">Users</a>
+                            <i class='bx bx-package' ></i>
+                            <a href="/managerProducts">Products</a>
                         </li>
                         <li class="menu-item">
-                            <i class='bx bx-cart'></i>
-                            <a href="/adminPartners">Partners</a>
+                            <i class='bx bx-archive-in'></i>
+                            <a href="/managerInputs">Inputs</a>
                         </li>
                         <li class="menu-item">
-                            <i class='bx bx-star'></i>
-                            <a href="/adminStars">Stars</a>
+                            <i class='bx bx-archive-out' ></i>
+                            <a href="/managerOutputs">Outputs</a>
                         </li>
                         <li class="menu-item">
                             <i class='bx bx-log-out' ></i>
@@ -46,7 +46,7 @@
     <section class="big-image">
         <div class="wrapper2">
             <div class="wrapper2Content">
-                <form action="/postCreateUser" method="post">
+                <form action="/postCreateProduct" method="post">
                     <div class="close">
                         <i class='bx bx-x-circle'></i>
                     </div>
@@ -55,22 +55,16 @@
                         <input type="text" name="nameCreate" placeholder="Name" required>
                     </div>
                     <div class="input-box">
-                        <input type="number" name="phoneCreate" placeholder="Phone" required>
+                        <input type="text" name="codeCreate" placeholder="Code" required>
                     </div>
                     <div class="input-box">
-                        <input type="text" name="emailCreate" placeholder="Email" required>
+                        <input type="text" name="categoryCreate" placeholder="Category" required>
                     </div>
                     <div class="input-box">
-                        <input type="text" name="addressCreate" placeholder="Address" required>
+                        <input type="text" name="quantityCreate" placeholder="Quantity" required>
                     </div>
                     <div class="input-box">
-                        <input type="text" name="roleCreate" placeholder="Role" required>
-                    </div>
-                    <div class="input-box">
-                        <input type="text" name="userNameCreate" placeholder="User Name" required>
-                    </div>
-                    <div class="input-box">
-                        <input type="password" name="passwordCreate" placeholder="Password" required>
+                        <input type="text" name="descriptionCreate" placeholder="Descripttion" required>
                     </div>
                     <button type="submit" class="btn">Create</button>
                 </form>
@@ -80,8 +74,8 @@
             <div class="table">
                 <section class="table__header">
                     <button class="btn-create"></button>
-                    <h1>Welcome: <%= admin.name%> - <%= admin.id%></h1>
-                    <h1>Users List</h1>
+                    <h1>Welcome: <%= manager.name%> - <%= manager.id%></h1>
+                    <h1>Products List</h1>
                     <div class="input-group">
                         <input type="search" placeholder="Search Data...">
                         <img src="images/search.png" alt="">
@@ -93,65 +87,53 @@
                             <tr>
                                 <th> Id <span class="icon-arrow">&UpArrow;</span></th>
                                 <th> Name <span class="icon-arrow">&UpArrow;</span></th>
-                                <th> Phone <span class="icon-arrow">&UpArrow;</span></th>
-                                <th> Email <span class="icon-arrow">&UpArrow;</span></th>
-                                <th> Address <span class="icon-arrow">&UpArrow;</span></th>
-                                <th> Role <span class="icon-arrow">&UpArrow;</span></th>
-                                <th> User Name <span class="icon-arrow">&UpArrow;</span></th>
-                                <th> Password <span class="icon-arrow">&UpArrow;</span></th>
+                                <th> Code <span class="icon-arrow">&UpArrow;</span></th>
+                                <th> Category <span class="icon-arrow">&UpArrow;</span></th>
+                                <th> Quantity <span class="icon-arrow">&UpArrow;</span></th>
+                                <th> Description <span class="icon-arrow">&UpArrow;</span></th>
                                 <th> Actions </th>
-                                <th> Orders </th>
                             </tr>
                         </thead>
                         <tbody>
-                        <% listUser.forEach(function(user) { %>
+                        <% listProducts.forEach(function(product) { %>
                             <tr>
-                                <td><%= user.id %></td>
-                                <td><%= user.name %></td>
-                                <td><%= user.phone %></td>
-                                <td><%= user.email %></td>
-                                <td><%= user.address %></td>
-                                <td><%= user.role %></td>
-                                <td><%= user.userName %></td>
-                                <td><%= user.password %></td>
+                                <td><%= product.id %></td>
+                                <td><%= product.name %></td>
+                                <td><%= product.code %></td>
+                                <td><%= product.category %></td>
+                                <td><%= product.quantity %></td>
+                                <td><%= product.description %></td>
                                 <td class="actions">
-                                    <button class="btn-edit" data-id="<%= user.id %>"></button>
-                                    <form action="/postDeleteUser/<%= user.id %>" method="post">
-                                        <button class="btn-delete"></button>
+                                    <button class="btn-edit" data-id="<%= product.id %>"></button>
+                                    <form action="/postDeleteProduct/<%= product.id %>" method="post">
+                                        <button class="btn-info"></button>
                                     </form>
                                 </td>
-                                <td>None</td>
                             </tr>
-                            <div class="wrapper3" id="edit<%= user.id %>">
+                            <div class="wrapper3" id="edit<%= product.id %>">
                                 <div class="wrapper3Content">
-                                    <form action="/postEditUser" method="post" class="editForm">
-                                        <div class="close" id="close<%= user.id %>">
+                                    <form action="/postEditProduct" method="post" class="editForm">
+                                        <div class="close" id="close<%= product.id %>">
                                             <i class='bx bx-x-circle'></i>
                                         </div>
                                         <h1>Edit</h1>
                                         <div class="input-box d-none">
-                                            <input type="text" name="idEdit" value="<%= user.id %>" placeholder="Id" required>
+                                            <input type="text" name="idEdit" value="<%= product.id %>" placeholder="Id" required>
                                         </div>
                                         <div class="input-box">
-                                            <input type="text" name="nameEdit" value="<%= user.name %>" placeholder="Name" required>
+                                            <input type="text" name="nameEdit" value="<%= product.name %>" placeholder="Name" required>
                                         </div>
                                         <div class="input-box">
-                                            <input type="number" name="phoneEdit" value="<%= user.phone %>" placeholder="Phone" required>
+                                            <input type="text" name="codeEdit" value="<%= product.code %>" placeholder="Code" required>
                                         </div>
                                         <div class="input-box">
-                                            <input type="text" name="emailEdit" value="<%= user.email %>" placeholder="Email" required>
+                                            <input type="text" name="categoryEdit" value="<%= product.category %>" placeholder="Category" required>
                                         </div>
                                         <div class="input-box">
-                                            <input type="text" name="addressEdit" value="<%= user.address %>" placeholder="Address" required>
+                                            <input type="text" name="quantityEdit" value="<%= product.quantity %>" placeholder="Quantity" required>
                                         </div>
                                         <div class="input-box">
-                                            <input type="text" name="roleEdit" value="<%= user.role %>" placeholder="Role" required>
-                                        </div>
-                                        <div class="input-box">
-                                            <input type="text" name="userNameEdit" value="<%= user.userName %>" placeholder="User Name" required>
-                                        </div>
-                                        <div class="input-box">
-                                            <input type="password" name="passwordEdit" value="<%= user.password %>" placeholder="Password" required>
+                                            <input type="text" name="descriptionEdit" value="<%= product.description %>" placeholder="Description" required>
                                         </div>
                                         <button type="submit" class="btn">Update</button>
                                     </form>

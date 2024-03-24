@@ -2,7 +2,9 @@ const connection = require('../config/database');
 const {
     getLogin, 
     getListUsers, createUser, editUserById, deleteUserById,
-    getListPartners, createPartner, editPartnerById, deletePartnerById
+    getListPartners, createPartner, editPartnerById, deletePartnerById,
+    getListProducts, createProduct, editProductById, deleteProductById,
+    getListInputs, createInput, editInputById
 } = require('../services/CRUDService');
 
 const getHomePage = (req, res) => {
@@ -32,7 +34,7 @@ const getUser = async (req, res) => {
     if (req.session.role == 'admin') {
         res.redirect('/adminUsers');
     } else if (req.session.role == 'manager') {
-        res.redirect('/manager');
+        res.redirect('/managerProducts');
     } else if (req.session.role == 'shipper') {
         res.redirect('/shipper');
     } else {
@@ -44,7 +46,7 @@ const getLogout = (req,res) => {
     req.session.user = false;
     res.redirect('/');
 }
-
+// Admin
 const getAdminUsersPage = async (req,res) => {
     if (req.session.role == 'admin') {
         let results = await getListUsers();
@@ -119,23 +121,77 @@ const postDeletePartner = async (req, res) => {
     await deletePartnerById(id);
     res.redirect('/adminPartners');
 }
-
-const getMangerPage = (req,res) => {
+// Manager
+const getMangerProductsPage = async (req,res) => {
     if (req.session.role == 'manager') {
-        res.render('manager.ejs', {user : req.session.user});
+        let results = await getListProducts();
+        return res.render('managerProducts.ejs', {
+            manager : req.session.user,
+            listProducts : results
+        });
     } else {
         res.redirect('/login');
     }
 }
-const getProduct = async () => {
-    let results = await getProductList();
-    return res.render('product.ejs', {listProduct: results})
+const postCreateProduct = async (req, res) => {
+    let name = req.body.nameCreate;
+    let code = req.body.codeCreate;
+    let category = req.body.categoryCreate;
+    let quantity = req.body.quantityCreate;
+    let description = req.body.descriptionCreate;
+    await createProduct(name, code, category, quantity, description);
+    res.redirect('/managerProducts');
+}
+const postEditProduct = async (req,res) => {
+    let id = req.body.idEdit;
+    let name = req.body.nameEdit;
+    let code = req.body.codeEdit;
+    let category = req.body.categoryEdit;
+    let quantity = req.body.quantityEdit;
+    let description = req.body.descriptionEdit;
+    await editProductById(id, name, code, category, quantity, description);
+    res.redirect('/managerProducts');
+}
+const postDeleteProduct = async (req, res) => {
+    const id = req.params.id;
+    await deleteProductById(id);
+    res.redirect('/managerProducts');
+}
+const getMangerInputsPage = async (req,res) => {
+    if (req.session.role == 'manager') {
+        let results = await getListInputs();
+        return res.render('managerInputs.ejs', {
+            manager : req.session.user,
+            listInputs : results
+        });
+    } else {
+        res.redirect('/login');
+    }
+}
+const postCreateInput = async (req, res) => {
+    let dateCreate = req.body.dateCreate;
+    let idShipperCreate = req.body.idShipperCreate;
+    let idManagerCreate = req.body.idManagerCreate;
+    let idSupplierCreate = req.body.idSupplierCreate;
+    let addressCreate = req.body.addressCreate;
+    let statusCreate = req.body.statusCreate;
+    await createInput(dateCreate, idShipperCreate, idManagerCreate, idSupplierCreate, addressCreate, statusCreate);
+    res.redirect('/managerInputs');
+}
+const postEditInput = async (req,res) => {
+    let id = req.body.idEdit;
+    let idShipper = req.body.idShipperEdit;
+    let idSupplier = req.body.idSupplierEdit;
+    let address = req.body.addressEdit;
+    let status = req.body.statusEdit;
+    await editInputById(id, idShipper, idSupplier, address, status);
+    res.redirect('/managerInputs');
 }
 
 module.exports = {
     getHomePage, getLoginPage, postLogin, getUser, getLogout, 
     getAdminUsersPage, postCreateUser, postEditUser, postDeleteUser,
     getAdminPartnersPage, postCreatePartner, postEditPartner, postDeletePartner,
-    
-    getProduct, getMangerPage
+    getMangerProductsPage, postCreateProduct, postEditProduct, postDeleteProduct,
+    getMangerInputsPage, postCreateInput, postEditInput
 }

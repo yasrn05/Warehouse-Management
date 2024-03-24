@@ -4,8 +4,8 @@ const {
     getHomePage, getLoginPage, postLogin, getUser, getLogout,
     getAdminUsersPage, postCreateUser, postEditUser, postDeleteUser,
     getAdminPartnersPage, postCreatePartner, postEditPartner, postDeletePartner,
-    getMangerPage,
-    getProduct
+    getMangerProductsPage, postCreateProduct, postEditProduct, postDeleteProduct,
+    getMangerInputsPage, postCreateInput, postEditInput
 } = require('../controllers/homeController')
 const router = express.Router()
 router.use(session({
@@ -19,7 +19,7 @@ router.get('/login', getLoginPage)
 router.post('/postLogin', postLogin)
 router.get('/user', getUser)
 router.get('/logout', getLogout)
-
+// Admin
 router.get('/adminUsers', getAdminUsersPage)
 router.post('/postCreateUser', postCreateUser)
 router.post('/postEditUser', postEditUser)
@@ -28,8 +28,13 @@ router.get('/adminPartners', getAdminPartnersPage)
 router.post('/postCreatePartner', postCreatePartner)
 router.post('/postEditPartner', postEditPartner)
 router.post('/postDeletePartner/:id', postDeletePartner)
-
-router.get('/manager', getMangerPage)
-router.get('/product', getProduct)
+// Manager
+router.get('/managerProducts', getMangerProductsPage)
+router.post('/postCreateProduct', postCreateProduct)
+router.post('/postEditProduct', postEditProduct)
+router.post('/postDeleteProduct/:id', postDeleteProduct)
+router.get('/managerInputs', getMangerInputsPage)
+router.post('/postCreateInput', postCreateInput)
+router.post('/postEditInput', postEditInput)
 
 module.exports = router;

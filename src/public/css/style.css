@@ -654,6 +654,19 @@ a {
     transform: scale(1.15);
     cursor: pointer;
 }
+.table .btn-info {
+    display: inline-block;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+    background: #fff6 url(../images/info.png) center / 80% no-repeat;
+    transition: .2s ease-in-out;
+}
+.table .btn-info:hover { 
+    background-color: #fff;
+    transform: scale(1.15);
+    cursor: pointer;
+}
 .table__header {
     width: 100%;
     height: 10%;
