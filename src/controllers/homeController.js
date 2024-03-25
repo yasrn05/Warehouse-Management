@@ -4,7 +4,7 @@ const {
     getListUsers, createUser, editUserById, deleteUserById,
     getListPartners, createPartner, editPartnerById, deletePartnerById,
     getListProducts, createProduct, editProductById, deleteProductById,
-    getListInputs, createInput, editInputById, getInfoInput
+    getListInputs, createInput, editInputById, getInfoInput, createInfoInput, editInfoInputById
 } = require('../services/CRUDService');
 
 const getHomePage = (req, res) => {
@@ -208,14 +208,35 @@ const postEditInput = async (req,res) => {
 const getManagerInfoInputPage = async (req, res) => {
     if (req.session.role == 'manager') {
         const idInput = req.params.id;
+        req.session.idInput = req.params.id;
         let results = await getInfoInput(idInput);
         return res.render('managerInfoInput.ejs', {
             manager : req.session.user,
+            idInput : req.params.id,
             infoInput : results
         });
     } else {
         res.redirect('/login');
     }
+}
+const postCreateInfoInput = async (req, res) => {
+    let idInput = req.body.idInput;
+    let idProduct = req.body.idProduct;
+    let quantity = req.body.quantity;
+    let price = req.body.price;
+    let status = req.body.status;
+    await createInfoInput(idInput, idProduct, quantity, price, status);
+    res.redirect('/managerInfoInput/' + idInput);
+}
+const postEditInfoInput = async (req,res) => {
+    let id = req.body.idEdit;
+    let idProduct = req.body.idProduct;
+    let quantity = req.body.quantity;
+    let price = req.body.price;
+    let status = req.body.statusEdit;
+    await editInfoInputById(id, idProduct, quantity, price, status);
+    let idInput = req.session.idInput;
+    res.redirect('/managerInfoInput/' + idInput);
 }
 
 module.exports = {
@@ -223,5 +244,5 @@ module.exports = {
     getAdminUsersPage, postCreateUser, postEditUser, postDeleteUser,
     getAdminPartnersPage, postCreatePartner, postEditPartner, postDeletePartner,
     getMangerProductsPage, postCreateProduct, postEditProduct, postDeleteProduct,
-    getMangerInputsPage, postCreateInput, postEditInput, getManagerInfoInputPage
+    getMangerInputsPage, postCreateInput, postEditInput, getManagerInfoInputPage, postCreateInfoInput, postEditInfoInput
 }

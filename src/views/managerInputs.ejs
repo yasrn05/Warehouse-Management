@@ -115,9 +115,9 @@
                                 <td><%= input.status %></td>
                                 <td class="actions">
                                     <button class="btn-edit" data-id="<%= input.id %>"></button>
-                                    <form action="/getInfoInput/<%= input.id %>" method="post">
+                                    <a href="/managerInfoInput/<%= input.id %>">
                                         <button class="btn-info"></button>
-                                    </form>
+                                    </a>
                                 </td>
                             </tr>
                             <div class="wrapper3" id="edit<%= input.id %>">

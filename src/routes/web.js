@@ -5,7 +5,7 @@ const {
     getAdminUsersPage, postCreateUser, postEditUser, postDeleteUser,
     getAdminPartnersPage, postCreatePartner, postEditPartner, postDeletePartner,
     getMangerProductsPage, postCreateProduct, postEditProduct, postDeleteProduct,
-    getMangerInputsPage, postCreateInput, postEditInput, getManagerInfoInputPage
+    getMangerInputsPage, postCreateInput, postEditInput, getManagerInfoInputPage, postCreateInfoInput, postEditInfoInput
 } = require('../controllers/homeController')
 const router = express.Router()
 router.use(session({
@@ -38,5 +38,7 @@ router.get('/managerInputs/:id', getMangerInputsPage)
 router.post('/postCreateInput', postCreateInput)
 router.post('/postEditInput', postEditInput)
 router.get('/managerInfoInput/:id', getManagerInfoInputPage)
+router.post('/postCreateInfoInput', postCreateInfoInput)
+router.post('/postEditInfoInput', postEditInfoInput)
 
 module.exports = router;

@@ -138,8 +138,40 @@ const editInputById = async(id, idShipper, idSupplier, address, status) => {
         WHERE id = ?
         `,[idShipper, idSupplier, address, status, id]);
 }
-const getInfoInput = async () => {
-
+const getInfoInput = async (idInput) => {
+    let [results, fields] = await connection.query(
+        `SELECT
+            inputInfo.id AS 'id',
+            inputInfo.idProduct AS 'idProduct',
+            products.name AS 'nameProduct',
+            products.category AS 'categoryProduct',
+            products.code AS 'codeProduct',
+            inputInfo.quantity AS 'quantity',
+            inputInfo.price AS 'price',
+            inputInfo.status AS 'status'
+        FROM inputInfo
+        JOIN products ON inputInfo.idProduct = products.id
+        WHERE inputInfo.idInput = ?
+        GROUP BY
+            inputInfo.id, inputInfo.quantity, inputInfo.price, inputInfo.status, inputInfo.idProduct, inputInfo.idInput,
+            products.name, products.category, products.code `
+        ,[idInput]);
+    return results;
+}
+const createInfoInput = async (idInput, idProduct, quantity, price, status) => {
+    let [results, fields] = await connection.query(
+        `INSERT 
+        INTO inputInfo
+        (idInput, idProduct, quantity, price, status) 
+        VALUES (?, ?, ?, ?, ?)`
+        ,[idInput, idProduct, quantity, price, status]);
+}
+const editInfoInputById = async(id, idProduct, quantity, price, status) => {
+    let [results, fields] = await connection.query(
+        `UPDATE inputInfo
+        SET idProduct = ?, quantity = ?, price = ?, status = ?
+        WHERE id = ?
+        `,[idProduct, quantity, price, status, id]);
 }
 
 module.exports = {
@@ -147,5 +179,5 @@ module.exports = {
     getListUsers, createUser, editUserById, deleteUserById,
     getListPartners, createPartner, editPartnerById, deletePartnerById,
     getListProducts, createProduct, editProductById, deleteProductById,
-    getListInputs, createInput, editInputById, getInfoInput
+    getListInputs, createInput, editInputById, getInfoInput, createInfoInput, editInfoInputById
 }
