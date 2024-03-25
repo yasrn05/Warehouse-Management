@@ -92,13 +92,23 @@ const editProductById = async(id, name, code, category, quantity, description) =
         WHERE id = ?
         `,[name, code, category, quantity, description, id]);
 }
-const deleteProductById = async (id) => {
+const getInfoProduct = async (idProduct) => {
     let [results, fields] = await connection.query(
-        `DELETE 
-        FROM products
-        WHERE id = ?`
-        , [id]
-    );
+        `SELECT
+	        inputs.id AS 'id',
+            inputs.date AS 'date',
+            inputs.address AS 'address',
+            partners.name AS 'nameSupplier',
+            partners.phone AS 'phoneSupplier'
+        FROM inputInfo
+        JOIN inputs ON inputInfo.idInput = inputs.id
+        JOIN partners ON inputs.idSupplier = partners.id
+        WHERE inputInfo.idProduct = ?
+        GROUP BY
+            inputs.id, inputs.date, inputs.address,
+            partners.name, partners.phone`
+        ,[idProduct]);
+    return results;
 }
 const getListInputs = async (idManager) => {
     let [results, fields] = await connection.query(
@@ -251,7 +261,7 @@ module.exports = {
     getLogin, 
     getListUsers, createUser, editUserById, deleteUserById,
     getListPartners, createPartner, editPartnerById, deletePartnerById,
-    getListProducts, createProduct, editProductById, deleteProductById,
+    getListProducts, createProduct, editProductById, getInfoProduct,
     getListInputs, createInput, editInputById, getInfoInput, createInfoInput, editInfoInputById,
     getListOutputs, createOutput, editOutputById, getInfoOutput, createInfoOutput, editInfoOutputById
 }

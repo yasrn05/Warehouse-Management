@@ -109,9 +109,9 @@
                                 <td><%= product.description %></td>
                                 <td class="actions">
                                     <button class="btn-edit" data-id="<%= product.id %>"></button>
-                                    <form action="/postDeleteProduct/<%= product.id %>" method="post">
+                                    <a href="/managerInfoProduct/<%= product.id %>">
                                         <button class="btn-info"></button>
-                                    </form>
+                                    </a>
                                 </td>
                             </tr>
                             <div class="wrapper3" id="edit<%= product.id %>">

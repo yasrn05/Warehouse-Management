@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Comatible" content="IE-edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="http://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/css/style.css">
+    <title>Manager</title>
+</head>
+<body>
+    <section class="top">
+        <div class="container">
+            <div class="row justify-content">
+                <div class="logo"><a href="/"><img src="/images/logo.png" alt="Logo"></a></div>
+                <div class="menu-bar">
+                    <span></span>
+                </div>
+                <div class="menu-items">
+                    <ul>
+                        <li class="menu-item">
+                            <i class='bx bxs-home'></i>
+                            <a href="/">Home</a>
+                        </li>
+                        <li class="menu-item">
+                            <i class='bx bx-user-circle' ></i>
+                            <a href="/profile">Profile</a>
+                        </li>
+                        <li class="menu-item">
+                            <i class='bx bx-package' ></i>
+                            <a href="/managerProducts">Products</a>
+                        </li>
+                        <li class="menu-item">
+                            <i class='bx bx-archive-in'></i>
+                            <a href="/managerInputs/<%= manager.id%>">Inputs</a>
+                        </li>
+                        <li class="menu-item">
+                            <i class='bx bx-archive-out' ></i>
+                            <a href="/managerOutputs/<%= manager.id%>">Outputs</a>
+                        </li>
+                        <li class="menu-item">
+                            <i class='bx bx-log-out' ></i>
+                            <a href="/logout">Logout</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="big-image">
+        <div class="big-image-content">
+            <div class="table">
+                <section class="table__header">
+                    <button class="btn-create" id="btn-create"></button>
+                    <h1>Welcome: <%= manager.name%> - <%= manager.id%></h1>
+                    <h1>Info Product: <%= idProduct%></h1>
+                    <div class="input-group">
+                        <input type="search" placeholder="Search Data...">
+                    </div>
+                </section>
+                <section class="table__body">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th> Id <span class="icon-arrow">&UpArrow;</span></th>
+                                <th> Date <span class="icon-arrow">&UpArrow;</span></th>
+                                <th> Supplier <span class="icon-arrow">&UpArrow;</span></th>
+                                <th> Phone Supplier <span class="icon-arrow">&UpArrow;</span></th>
+                                <th> Address <span class="icon-arrow">&UpArrow;</span></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        <% infoProduct.forEach(function(info) { %>
+                            <tr>
+                                <td><%= info.id %></td>
+                                <td><%= info.date %></td>
+                                <td><%= info.nameSupplier %></td>
+                                <td><%= info.phoneSupplier %></td>
+                                <td><%= info.address %></td>
+                            </tr>
+                        <% }); %>   
+                        </tbody>
+                    </table>
+                </section>
+            </div>
+        </div>
+    </section>
+    <script src="/js/script.js"></script>
+</body>
+</html>

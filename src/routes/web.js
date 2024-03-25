@@ -4,7 +4,7 @@ const {
     getHomePage, getLoginPage, postLogin, getUser, getProfile, getLogout,
     getAdminUsersPage, postCreateUser, postEditUser, postDeleteUser,
     getAdminPartnersPage, postCreatePartner, postEditPartner, postDeletePartner,
-    getMangerProductsPage, postCreateProduct, postEditProduct, postDeleteProduct,
+    getMangerProductsPage, postCreateProduct, postEditProduct, getManagerInfoProductPage,
     getMangerInputsPage, postCreateInput, postEditInput, getManagerInfoInputPage, postCreateInfoInput, postEditInfoInput,
     getMangerOutputsPage, postCreateOutput, postEditOutput, getManagerInfoOutputPage, postCreateInfoOutput, postEditInfoOutput
 } = require('../controllers/homeController')
@@ -34,7 +34,7 @@ router.post('/postDeletePartner/:id', postDeletePartner)
 router.get('/managerProducts', getMangerProductsPage)
 router.post('/postCreateProduct', postCreateProduct)
 router.post('/postEditProduct', postEditProduct)
-router.post('/postDeleteProduct/:id', postDeleteProduct)
+router.get('/managerInfoProduct/:id', getManagerInfoProductPage)
 router.get('/managerInputs/:id', getMangerInputsPage)
 router.post('/postCreateInput', postCreateInput)
 router.post('/postEditInput', postEditInput)

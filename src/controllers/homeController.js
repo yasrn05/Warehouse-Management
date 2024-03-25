@@ -1,7 +1,7 @@
 const connection = require('../config/database');
 const {
     getLogin, 
-    getListUsers, createUser, editUserById, deleteUserById,
+    getListUsers, createUser, editUserById, deleteUserById, getInfoProduct,
     getListPartners, createPartner, editPartnerById, deletePartnerById,
     getListProducts, createProduct, editProductById, deleteProductById,
     getListInputs, createInput, editInputById, getInfoInput, createInfoInput, editInfoInputById,
@@ -168,10 +168,19 @@ const postEditProduct = async (req,res) => {
     await editProductById(id, name, code, category, quantity, description);
     res.redirect('/managerProducts');
 }
-const postDeleteProduct = async (req, res) => {
-    const id = req.params.id;
-    await deleteProductById(id);
-    res.redirect('/managerProducts');
+const getManagerInfoProductPage = async (req, res) => {
+    if (req.session.role == 'manager') {
+        const idProduct = req.params.id;
+        req.session.idProduct = req.params.id;
+        let results = await getInfoProduct(idProduct);
+        return res.render('managerInfoProduct.ejs', {
+            manager : req.session.user,
+            idProduct : req.params.id,
+            infoProduct : results
+        });
+    } else {
+        res.redirect('/login');
+    }
 }
 const getMangerInputsPage = async (req,res) => {
     if (req.session.role == 'manager') {
@@ -310,7 +319,7 @@ module.exports = {
     getHomePage, getLoginPage, postLogin, getUser, getProfile, getLogout, 
     getAdminUsersPage, postCreateUser, postEditUser, postDeleteUser,
     getAdminPartnersPage, postCreatePartner, postEditPartner, postDeletePartner,
-    getMangerProductsPage, postCreateProduct, postEditProduct, postDeleteProduct,
+    getMangerProductsPage, postCreateProduct, postEditProduct, getManagerInfoProductPage,
     getMangerInputsPage, postCreateInput, postEditInput, getManagerInfoInputPage, postCreateInfoInput, postEditInfoInput,
     getMangerOutputsPage, postCreateOutput, postEditOutput, getManagerInfoOutputPage, postCreateInfoOutput, postEditInfoOutput
 }
