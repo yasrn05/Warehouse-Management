@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Comatible" content="IE-edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="http://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/css/style.css">
+    <title>Shipper</title>
+</head>
+<body>
+    <section class="top">
+        <div class="container">
+            <div class="row justify-content">
+                <div class="logo"><a href="/"><img src="/images/logo.png" alt="Logo"></a></div>
+                <div class="menu-bar">
+                    <span></span>
+                </div>
+                <div class="menu-items">
+                    <ul>
+                        <li class="menu-item">
+                            <i class='bx bxs-home'></i>
+                            <a href="/">Home</a>
+                        </li>
+                        <li class="menu-item">
+                            <i class='bx bx-user-circle' ></i>
+                            <a href="/profile">Profile</a>
+                        </li>
+                        <li class="menu-item">
+                            <i class='bx bx-archive-in'></i>
+                            <a href="/shipperInputs/<%= shipper.id%>">Inputs</a>
+                        </li>
+                        <li class="menu-item">
+                            <i class='bx bx-archive-out' ></i>
+                            <a href="/shipperOutputs/<%= shipper.id%>">Outputs</a>
+                        </li>
+                        <li class="menu-item">
+                            <i class='bx bx-log-out' ></i>
+                            <a href="/logout">Logout</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="big-image">
+        <div class="big-image-content">
+            <div class="table">
+                <section class="table__header">
+                    <button class="btn-create" id="btn-create"></button>
+                    <h1>Welcome: <%= shipper.name%> - <%= shipper.id%></h1>
+                    <h1>List Inputs</h1>
+                    <div class="input-group">
+                        <input type="search" placeholder="Search Data...">
+                    </div>
+                </section>
+                <section class="table__body">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th> Id <span class="icon-arrow">&UpArrow;</span></th>
+                                <th> Date <span class="icon-arrow">&UpArrow;</span></th>
+                                <th> Product <span class="icon-arrow">&UpArrow;</span></th>
+                                <th> Quantity <span class="icon-arrow">&UpArrow;</span></th>
+                                <th> Price <span class="icon-arrow">&UpArrow;</span></th>
+                                <th> Supplier <span class="icon-arrow">&UpArrow;</span></th>                                
+                                <th> Phone Supplier <span class="icon-arrow">&UpArrow;</span></th>
+                                <th> Address <span class="icon-arrow">&UpArrow;</span></th>
+                                <th> Status <span class="icon-arrow">&UpArrow;</span></th>
+                                <th> Actions </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        <% listInputs.forEach(function(info) { %>
+                            <tr>
+                                <td><%= info.id %></td>
+                                <td><%= info.date %></td>
+                                <td><%= info.product %></td>
+                                <td><%= info.quantity %></td>
+                                <td><%= info.price %></td>
+                                <td><%= info.nameSupplier %></td>
+                                <td><%= info.phoneSupplier %></td>
+                                <td><%= info.address %></td>
+                                <td><%= info.status %></td>
+                                <td class="actions">
+                                    <button class="btn-edit" data-id="<%= info.id %>"></button>
+                                </td>
+                            </tr>
+                            <div class="wrapper3" id="edit<%= info.id %>">
+                                <div class="wrapper3Content">
+                                    <form action="/postEditInfoInput" method="post" class="editForm">
+                                        <div class="close" id="close<%= info.id %>">
+                                            <i class='bx bx-x-circle'></i>
+                                        </div>
+                                        <h1>Edit</h1>
+                                        <div class="input-box d-none">
+                                            <input type="text" name="idEdit" value="<%= info.id %>" placeholder="Id" required>
+                                        </div>
+                                        <div class="input-box d-none">
+                                            <input type="number" name="idProduct" value="<%= info.idProduct %>" placeholder="Id Product" required>
+                                        </div>
+                                        <div class="input-box d-none">
+                                            <input type="number" name="quantity" value="<%= info.quantity %>" placeholder="Quantity" required>
+                                        </div>
+                                        <div class="input-box d-none">
+                                            <input type="text" name="price" value="<%= info.price %>" placeholder="Price" required>
+                                        </div>
+                                        <div class="input-box">
+                                            <input type="text" name="statusEdit" value="<%= info.status %>" placeholder="Status" required>
+                                        </div>
+                                        <button type="submit" class="btn">Update</button>
+                                    </form>
+                                </div>
+                            </div>
+                        <% }); %>   
+                        </tbody>
+                    </table>
+                </section>
+            </div>
+        </div>
+    </section>
+    <script src="/js/script.js"></script>
+</body>
+</html>

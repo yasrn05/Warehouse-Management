@@ -103,10 +103,7 @@ const getInfoProduct = async (idProduct) => {
         FROM inputInfo
         JOIN inputs ON inputInfo.idInput = inputs.id
         JOIN partners ON inputs.idSupplier = partners.id
-        WHERE inputInfo.idProduct = ?
-        GROUP BY
-            inputs.id, inputs.date, inputs.address,
-            partners.name, partners.phone`
+        WHERE inputInfo.idProduct = ?`
         ,[idProduct]);
     return results;
 }
@@ -126,10 +123,7 @@ const getListInputs = async (idManager) => {
         FROM inputs
         JOIN users ON inputs.idShipper = users.id
         JOIN partners ON inputs.idSupplier = partners.id
-        WHERE inputs.idManager = ?
-        GROUP BY
-            inputs.id, inputs.date, inputs.address, inputs.status, inputs.idShipper, inputs.idSupplier,
-            users.name, users.phone, partners.name, partners.phone`
+        WHERE inputs.idManager = ?`
         ,[idManager]);
     return results;
 }
@@ -161,10 +155,7 @@ const getInfoInput = async (idInput) => {
             inputInfo.status AS 'status'
         FROM inputInfo
         JOIN products ON inputInfo.idProduct = products.id
-        WHERE inputInfo.idInput = ?
-        GROUP BY
-            inputInfo.id, inputInfo.quantity, inputInfo.price, inputInfo.status, inputInfo.idProduct, inputInfo.idInput,
-            products.name, products.category, products.code `
+        WHERE inputInfo.idInput = ?`
         ,[idInput]);
     return results;
 }
@@ -199,10 +190,7 @@ const getListOutputs = async (idManager) => {
         FROM outputs
         JOIN users ON outputs.idShipper = users.id
         JOIN partners ON outputs.idCustomer = partners.id
-        WHERE outputs.idManager = ?
-        GROUP BY
-            outputs.id, outputs.date, outputs.address, outputs.status, outputs.idShipper, outputs.idCustomer,
-            users.name, users.phone, partners.name, partners.phone`
+        WHERE outputs.idManager = ?`
         ,[idManager]);
     return results;
 }
@@ -234,10 +222,7 @@ const getInfoOutput = async (idOutput) => {
             outputInfo.status AS 'status'
         FROM outputInfo
         JOIN products ON outputInfo.idProduct = products.id
-        WHERE outputInfo.idOutput = ?
-        GROUP BY
-            outputInfo.id, outputInfo.quantity, outputInfo.price, outputInfo.status, outputInfo.idProduct, outputInfo.idOutput,
-            products.name, products.category, products.code `
+        WHERE outputInfo.idOutput = ?`
         ,[idOutput]);
     return results;
 }
@@ -256,6 +241,51 @@ const editInfoOutputById = async(id, idProduct, quantity, price, status) => {
         WHERE id = ?
         `,[idProduct, quantity, price, status, id]);
 }
+//Shipper
+const getListShipperInputs = async (idShipper) => {
+    let [results, fields] = await connection.query(
+        `SELECT
+            inputInfo.id AS 'id',
+            products.id AS 'idProduct',
+            products.name AS 'product',
+            inputInfo.quantity AS 'quantity',
+            inputInfo.price AS 'price',
+            inputs.date AS 'date',
+            inputs.address AS 'address',
+            partners.name AS 'nameSupplier',
+            partners.phone AS 'phoneSupplier',
+            inputInfo.status AS 'status'
+        FROM inputInfo
+        JOIN inputs ON inputInfo.idInput = inputs.id
+        JOIN partners ON inputs.idSupplier = partners.id
+        JOIN products ON inputInfo.idProduct = products.id
+        WHERE inputs.idShipper = ?
+        AND inputInfo.status = 'Shipping'`
+        ,[idShipper]);
+    return results;
+}
+const getListShipperOutputs = async (idShipper) => {
+    let [results, fields] = await connection.query(
+        `SELECT
+            outputInfo.id AS 'id',
+            products.id AS 'idProduct',
+            products.name AS 'product',
+            outputInfo.quantity AS 'quantity',
+            outputInfo.price AS 'price',
+            outputs.date AS 'date',
+            outputs.address AS 'address',
+            partners.name AS 'nameSupplier',
+            partners.phone AS 'phoneSupplier',
+            outputInfo.status AS 'status'
+        FROM outputInfo
+        JOIN outputs ON outputInfo.idOutput = outputs.id
+        JOIN partners ON outputs.idCustomer = partners.id
+        JOIN products ON outputInfo.idProduct = products.id
+        WHERE outputs.idShipper = ?
+        AND outputInfo.status = 'Shipping'`
+        ,[idShipper]);
+    return results;
+}
 
 module.exports = {
     getLogin, 
@@ -263,5 +293,6 @@ module.exports = {
     getListPartners, createPartner, editPartnerById, deletePartnerById,
     getListProducts, createProduct, editProductById, getInfoProduct,
     getListInputs, createInput, editInputById, getInfoInput, createInfoInput, editInfoInputById,
-    getListOutputs, createOutput, editOutputById, getInfoOutput, createInfoOutput, editInfoOutputById
+    getListOutputs, createOutput, editOutputById, getInfoOutput, createInfoOutput, editInfoOutputById,
+    getListShipperInputs, getListShipperOutputs
 }

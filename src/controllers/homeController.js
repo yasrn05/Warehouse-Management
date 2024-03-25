@@ -1,11 +1,12 @@
 const connection = require('../config/database');
 const {
     getLogin, 
-    getListUsers, createUser, editUserById, deleteUserById, getInfoProduct,
+    getListUsers, createUser, editUserById, deleteUserById,
     getListPartners, createPartner, editPartnerById, deletePartnerById,
-    getListProducts, createProduct, editProductById, deleteProductById,
+    getListProducts, createProduct, editProductById, getInfoProduct,
     getListInputs, createInput, editInputById, getInfoInput, createInfoInput, editInfoInputById,
-    getListOutputs, createOutput, editOutputById, getInfoOutput, createInfoOutput, editInfoOutputById
+    getListOutputs, createOutput, editOutputById, getInfoOutput, createInfoOutput, editInfoOutputById,
+    getListShipperInputs, getListShipperOutputs
 } = require('../services/CRUDService');
 
 const getHomePage = (req, res) => {
@@ -37,7 +38,8 @@ const getUser = async (req, res) => {
     } else if (req.session.role == 'manager') {
         res.redirect('/managerProducts');
     } else if (req.session.role == 'shipper') {
-        res.redirect('/shipper');
+        let idShipper = req.session.user.id
+        res.redirect('/shipperInputs/' + idShipper);
     } else {
         res.redirect('/login');
     }
@@ -245,8 +247,13 @@ const postEditInfoInput = async (req,res) => {
     let price = req.body.price;
     let status = req.body.statusEdit;
     await editInfoInputById(id, idProduct, quantity, price, status);
-    let idInput = req.session.idInput;
-    res.redirect('/managerInfoInput/' + idInput);
+    if (req.session.role == 'manager') {
+        let idInput = req.session.idInput;
+        res.redirect('/managerInfoInput/' + idInput);
+    } else if (req.session.role == 'shipper') {
+        let idShipper = req.session.user.id;
+        res.redirect('/shipperInputs/' + idShipper);
+    }
 }
 const getMangerOutputsPage = async (req,res) => {
     if (req.session.role == 'manager') {
@@ -311,8 +318,38 @@ const postEditInfoOutput = async (req,res) => {
     let price = req.body.price;
     let status = req.body.statusEdit;
     await editInfoOutputById(id, idProduct, quantity, price, status);
-    let idOutput = req.session.idOutput;
-    res.redirect('/managerInfoOutput/' + idOutput);
+    if (req.session.role == 'manager') {
+        let idOutput = req.session.idOutput;
+        res.redirect('/managerInfoOutput/' + idOutput);
+    } else if (req.session.role == 'shipper') {
+        let idShipper = req.session.user.id;
+        res.redirect('/shipperOutputs/' + idShipper);
+    }
+}
+//Shipper
+const getShipperInputsPage = async (req, res) => {
+    if (req.session.role == 'shipper') {
+        const idShipper = req.params.id;
+        let results = await getListShipperInputs(idShipper);
+        return res.render('shipperInputs.ejs', {
+            shipper : req.session.user,
+            listInputs : results
+        });
+    } else {
+        res.redirect('/login');
+    }
+}
+const getShipperOutputsPage = async (req, res) => {
+    if (req.session.role == 'shipper') {
+        const idShipper = req.params.id;
+        let results = await getListShipperOutputs(idShipper);
+        return res.render('shipperOutputs.ejs', {
+            shipper : req.session.user,
+            listOutputs : results
+        });
+    } else {
+        res.redirect('/login');
+    }
 }
 
 module.exports = {
@@ -321,5 +358,6 @@ module.exports = {
     getAdminPartnersPage, postCreatePartner, postEditPartner, postDeletePartner,
     getMangerProductsPage, postCreateProduct, postEditProduct, getManagerInfoProductPage,
     getMangerInputsPage, postCreateInput, postEditInput, getManagerInfoInputPage, postCreateInfoInput, postEditInfoInput,
-    getMangerOutputsPage, postCreateOutput, postEditOutput, getManagerInfoOutputPage, postCreateInfoOutput, postEditInfoOutput
+    getMangerOutputsPage, postCreateOutput, postEditOutput, getManagerInfoOutputPage, postCreateInfoOutput, postEditInfoOutput,
+    getShipperInputsPage, getShipperOutputsPage
 }
