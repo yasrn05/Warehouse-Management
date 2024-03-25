@@ -4,7 +4,8 @@ const {
     getListUsers, createUser, editUserById, deleteUserById,
     getListPartners, createPartner, editPartnerById, deletePartnerById,
     getListProducts, createProduct, editProductById, deleteProductById,
-    getListInputs, createInput, editInputById, getInfoInput, createInfoInput, editInfoInputById
+    getListInputs, createInput, editInputById, getInfoInput, createInfoInput, editInfoInputById,
+    getListOutputs, createOutput, editOutputById, getInfoOutput, createInfoOutput, editInfoOutputById
 } = require('../services/CRUDService');
 
 const getHomePage = (req, res) => {
@@ -238,11 +239,78 @@ const postEditInfoInput = async (req,res) => {
     let idInput = req.session.idInput;
     res.redirect('/managerInfoInput/' + idInput);
 }
+const getMangerOutputsPage = async (req,res) => {
+    if (req.session.role == 'manager') {
+        const idManager = req.params.id;
+        let results = await getListOutputs(idManager);
+        return res.render('managerOutputs.ejs', {
+            manager : req.session.user,
+            listOutputs : results
+        });
+    } else {
+        res.redirect('/login');
+    }
+}
+const postCreateOutput = async (req, res) => {
+    let dateCreate = req.body.dateCreate;
+    let idShipperCreate = req.body.idShipperCreate;
+    let idManagerCreate = req.body.idManagerCreate;
+    let idCustomerCreate = req.body.idCustomerCreate;
+    let addressCreate = req.body.addressCreate;
+    let statusCreate = req.body.statusCreate;
+    await createOutput(dateCreate, idShipperCreate, idManagerCreate, idCustomerCreate, addressCreate, statusCreate);
+    let idManager = req.session.user.id;
+    res.redirect('/managerOutputs/' + idManager);
+}
+const postEditOutput = async (req,res) => {
+    let id = req.body.idEdit;
+    let idShipper = req.body.idShipperEdit;
+    let idCustomer = req.body.idCustomerEdit;
+    let address = req.body.addressEdit;
+    let status = req.body.statusEdit;
+    await editOutputById(id, idShipper, idCustomer, address, status);
+    let idManager = req.session.user.id;
+    res.redirect('/managerOutputs/' + idManager);
+}
+const getManagerInfoOutputPage = async (req, res) => {
+    if (req.session.role == 'manager') {
+        const idOutput = req.params.id;
+        req.session.idOutput = req.params.id;
+        let results = await getInfoOutput(idOutput);
+        return res.render('managerInfoOutput.ejs', {
+            manager : req.session.user,
+            idOutput : req.params.id,
+            infoOutput : results
+        });
+    } else {
+        res.redirect('/login');
+    }
+}
+const postCreateInfoOutput = async (req, res) => {
+    let idOutput = req.body.idOutput;
+    let idProduct = req.body.idProduct;
+    let quantity = req.body.quantity;
+    let price = req.body.price;
+    let status = req.body.status;
+    await createInfoOutput(idOutput, idProduct, quantity, price, status);
+    res.redirect('/managerInfoOutput/' + idOutput);
+}
+const postEditInfoOutput = async (req,res) => {
+    let id = req.body.idEdit;
+    let idProduct = req.body.idProduct;
+    let quantity = req.body.quantity;
+    let price = req.body.price;
+    let status = req.body.statusEdit;
+    await editInfoOutputById(id, idProduct, quantity, price, status);
+    let idOutput = req.session.idOutput;
+    res.redirect('/managerInfoOutput/' + idOutput);
+}
 
 module.exports = {
     getHomePage, getLoginPage, postLogin, getUser, getProfile, getLogout, 
     getAdminUsersPage, postCreateUser, postEditUser, postDeleteUser,
     getAdminPartnersPage, postCreatePartner, postEditPartner, postDeletePartner,
     getMangerProductsPage, postCreateProduct, postEditProduct, postDeleteProduct,
-    getMangerInputsPage, postCreateInput, postEditInput, getManagerInfoInputPage, postCreateInfoInput, postEditInfoInput
+    getMangerInputsPage, postCreateInput, postEditInput, getManagerInfoInputPage, postCreateInfoInput, postEditInfoInput,
+    getMangerOutputsPage, postCreateOutput, postEditOutput, getManagerInfoOutputPage, postCreateInfoOutput, postEditInfoOutput
 }

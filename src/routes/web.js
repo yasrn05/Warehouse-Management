@@ -5,7 +5,8 @@ const {
     getAdminUsersPage, postCreateUser, postEditUser, postDeleteUser,
     getAdminPartnersPage, postCreatePartner, postEditPartner, postDeletePartner,
     getMangerProductsPage, postCreateProduct, postEditProduct, postDeleteProduct,
-    getMangerInputsPage, postCreateInput, postEditInput, getManagerInfoInputPage, postCreateInfoInput, postEditInfoInput
+    getMangerInputsPage, postCreateInput, postEditInput, getManagerInfoInputPage, postCreateInfoInput, postEditInfoInput,
+    getMangerOutputsPage, postCreateOutput, postEditOutput, getManagerInfoOutputPage, postCreateInfoOutput, postEditInfoOutput
 } = require('../controllers/homeController')
 const router = express.Router()
 router.use(session({
@@ -40,5 +41,11 @@ router.post('/postEditInput', postEditInput)
 router.get('/managerInfoInput/:id', getManagerInfoInputPage)
 router.post('/postCreateInfoInput', postCreateInfoInput)
 router.post('/postEditInfoInput', postEditInfoInput)
+router.get('/managerOutputs/:id', getMangerOutputsPage)
+router.post('/postCreateOutput', postCreateOutput)
+router.post('/postEditOutput', postEditOutput)
+router.get('/managerInfoOutput/:id', getManagerInfoOutputPage)
+router.post('/postCreateInfoOutput', postCreateInfoOutput)
+router.post('/postEditInfoOutput', postEditInfoOutput)
 
 module.exports = router;

@@ -173,11 +173,85 @@ const editInfoInputById = async(id, idProduct, quantity, price, status) => {
         WHERE id = ?
         `,[idProduct, quantity, price, status, id]);
 }
+const getListOutputs = async (idManager) => {
+    let [results, fields] = await connection.query(
+        `SELECT
+	        outputs.id AS 'id',
+            outputs.date AS 'date',
+            outputs.address AS 'address',
+            outputs.idShipper AS 'idShipper',
+            CASE WHEN users.role = 'shipper' THEN users.name ELSE 'ID sai' END AS 'nameShipper',
+            CASE WHEN users.role = 'shipper' THEN users.phone ELSE 'ID sai' END AS 'phoneShipper',
+            outputs.idCustomer AS 'idCustomer',
+            CASE WHEN partners.role = 'customer' THEN partners.name ELSE 'ID sai' END AS 'nameCustomer',
+            CASE WHEN partners.role = 'customer' THEN partners.phone ELSE 'ID sai' END AS 'phoneCustomer',
+            outputs.status AS 'status'
+        FROM outputs
+        JOIN users ON outputs.idShipper = users.id
+        JOIN partners ON outputs.idCustomer = partners.id
+        WHERE outputs.idManager = ?
+        GROUP BY
+            outputs.id, outputs.date, outputs.address, outputs.status, outputs.idShipper, outputs.idCustomer,
+            users.name, users.phone, partners.name, partners.phone`
+        ,[idManager]);
+    return results;
+}
+const createOutput = async (dateCreate, idShipperCreate, idManagerCreate, idCustomerCreate, addressCreate, statusCreate) => {
+    let [results, fields] = await connection.query(
+        `INSERT 
+        INTO outputs
+        (date, idShipper, idManager, idCustomer, address, status) 
+        VALUES (?, ?, ?, ?, ?, ?)`
+        ,[dateCreate, idShipperCreate, idManagerCreate, idCustomerCreate, addressCreate, statusCreate]);
+}
+const editOutputById = async(id, idShipper, idCustomer, address, status) => {
+    let [results, fields] = await connection.query(
+        `UPDATE outputs
+        SET idShipper = ?, idCustomer = ?, address = ?, status = ?
+        WHERE id = ?
+        `,[idShipper, idCustomer, address, status, id]);
+}
+const getInfoOutput = async (idOutput) => {
+    let [results, fields] = await connection.query(
+        `SELECT
+            outputInfo.id AS 'id',
+            outputInfo.idProduct AS 'idProduct',
+            products.name AS 'nameProduct',
+            products.category AS 'categoryProduct',
+            products.code AS 'codeProduct',
+            outputInfo.quantity AS 'quantity',
+            outputInfo.price AS 'price',
+            outputInfo.status AS 'status'
+        FROM outputInfo
+        JOIN products ON outputInfo.idProduct = products.id
+        WHERE outputInfo.idOutput = ?
+        GROUP BY
+            outputInfo.id, outputInfo.quantity, outputInfo.price, outputInfo.status, outputInfo.idProduct, outputInfo.idOutput,
+            products.name, products.category, products.code `
+        ,[idOutput]);
+    return results;
+}
+const createInfoOutput = async (idOutput, idProduct, quantity, price, status) => {
+    let [results, fields] = await connection.query(
+        `INSERT 
+        INTO outputInfo
+        (idOutput, idProduct, quantity, price, status) 
+        VALUES (?, ?, ?, ?, ?)`
+        ,[idOutput, idProduct, quantity, price, status]);
+}
+const editInfoOutputById = async(id, idProduct, quantity, price, status) => {
+    let [results, fields] = await connection.query(
+        `UPDATE outputInfo
+        SET idProduct = ?, quantity = ?, price = ?, status = ?
+        WHERE id = ?
+        `,[idProduct, quantity, price, status, id]);
+}
 
 module.exports = {
     getLogin, 
     getListUsers, createUser, editUserById, deleteUserById,
     getListPartners, createPartner, editPartnerById, deletePartnerById,
     getListProducts, createProduct, editProductById, deleteProductById,
-    getListInputs, createInput, editInputById, getInfoInput, createInfoInput, editInfoInputById
+    getListInputs, createInput, editInputById, getInfoInput, createInfoInput, editInfoInputById,
+    getListOutputs, createOutput, editOutputById, getInfoOutput, createInfoOutput, editInfoOutputById
 }
