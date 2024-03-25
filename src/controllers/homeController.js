@@ -3,7 +3,7 @@ const {
     getLogin, 
     getListUsers, createUser, editUserById, deleteUserById,
     getListPartners, createPartner, editPartnerById, deletePartnerById,
-    getListProducts, createProduct, editProductById, getInfoProduct,
+    getListProducts, createProduct, editProductById, getInfoProduct, getAdminStars,
     getListInputs, createInput, editInputById, getInfoInput, createInfoInput, editInfoInputById,
     getListOutputs, createOutput, editOutputById, getInfoOutput, createInfoOutput, editInfoOutputById,
     getListShipperInputs, getListShipperOutputs
@@ -138,6 +138,17 @@ const postDeletePartner = async (req, res) => {
     const id = req.params.id;
     await deletePartnerById(id);
     res.redirect('/adminPartners');
+}
+const getAdminStarsPage = async (req, res) => {
+    if (req.session.role == 'admin') {
+        let results = await getAdminStars();
+        return res.render('adminStars.ejs', {
+            admin : req.session.user,
+            listStars : results
+        });
+    } else {
+        res.redirect('/login');
+    }
 }
 // Manager
 const getMangerProductsPage = async (req,res) => {
@@ -354,7 +365,7 @@ const getShipperOutputsPage = async (req, res) => {
 
 module.exports = {
     getHomePage, getLoginPage, postLogin, getUser, getProfile, getLogout, 
-    getAdminUsersPage, postCreateUser, postEditUser, postDeleteUser,
+    getAdminUsersPage, postCreateUser, postEditUser, postDeleteUser, getAdminStarsPage,
     getAdminPartnersPage, postCreatePartner, postEditPartner, postDeletePartner,
     getMangerProductsPage, postCreateProduct, postEditProduct, getManagerInfoProductPage,
     getMangerInputsPage, postCreateInput, postEditInput, getManagerInfoInputPage, postCreateInfoInput, postEditInfoInput,

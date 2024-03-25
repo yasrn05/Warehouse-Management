@@ -69,6 +69,95 @@ const deletePartnerById = async (id) => {
         , [id]
     );
 }
+const getAdminStars = async () => {
+    let [results, fields] = await connection.query(
+        `SELECT id, name, role,
+            SUM(inputCount) AS inputCount,
+            SUM(outputCount) AS outputCount
+        FROM (
+            SELECT 
+                users.id AS id,
+                users.name AS name,
+                users.role AS role,
+                COUNT(inputs.idManager) AS inputCount,
+                0 AS outputCount
+            FROM users
+            JOIN inputs ON users.id = inputs.idManager
+            GROUP BY users.id, users.name, users.role
+            UNION ALL
+            SELECT 
+                users.id AS id,
+                users.name AS name,
+                users.role AS role,
+                0 AS inputCount,
+                COUNT(outputs.idManager) AS outputCount
+            FROM users
+            JOIN outputs ON users.id = outputs.idManager
+            GROUP BY users.id, users.name, users.role
+        ) AS counts
+        GROUP BY id, name, role
+        HAVING SUM(inputCount) > 0 OR SUM(outputCount) > 0
+
+        UNION ALL
+
+        SELECT id, name, role,
+            SUM(inputCount) AS inputCount,
+            SUM(outputCount) AS outputCount
+        FROM (
+            SELECT 
+                users.id AS id,
+                users.name AS name,
+                users.role AS role,
+                COUNT(inputs.idShipper) AS inputCount,
+                0 AS outputCount
+            FROM users
+            JOIN inputs ON users.id = inputs.idShipper
+            GROUP BY users.id, users.name, users.role
+            UNION ALL
+            SELECT 
+                users.id AS id,
+                users.name AS name,
+                users.role AS role,
+                0 AS inputCount,
+                COUNT(outputs.idShipper) AS outputCount
+            FROM users
+            JOIN outputs ON users.id = outputs.idShipper
+            GROUP BY users.id, users.name, users.role
+        ) AS counts
+        GROUP BY id, name, role
+        HAVING SUM(inputCount) > 0 OR SUM(outputCount) > 0
+        
+        UNION ALL
+        
+        SELECT id, name, role,
+            SUM(inputCount) AS inputCount,
+            SUM(outputCount) AS outputCount
+        FROM (
+            SELECT 
+                partners.id AS id,
+                partners.name AS name,
+                partners.role AS role,
+                COUNT(inputs.idSupplier) AS inputCount,
+                0 AS outputCount
+            FROM partners
+            JOIN inputs ON partners.id = inputs.idSupplier
+            GROUP BY partners.id, partners.name, partners.role
+            UNION ALL
+            SELECT 
+                partners.id AS id,
+                partners.name AS name,
+                partners.role AS role,
+                0 AS inputCount,
+                COUNT(outputs.idCustomer) AS outputCount
+            FROM partners
+            JOIN outputs ON partners.id = outputs.idCustomer
+            GROUP BY partners.id, partners.name, partners.role
+        ) AS counts
+        GROUP BY id, name, role
+        HAVING SUM(inputCount) > 0 OR SUM(outputCount) > 0`
+    );
+        return results;
+}
 // Manager
 const getListProducts = async () => {
     let [results, fields] = await connection.query(
@@ -290,7 +379,7 @@ const getListShipperOutputs = async (idShipper) => {
 module.exports = {
     getLogin, 
     getListUsers, createUser, editUserById, deleteUserById,
-    getListPartners, createPartner, editPartnerById, deletePartnerById,
+    getListPartners, createPartner, editPartnerById, deletePartnerById, getAdminStars,
     getListProducts, createProduct, editProductById, getInfoProduct,
     getListInputs, createInput, editInputById, getInfoInput, createInfoInput, editInfoInputById,
     getListOutputs, createOutput, editOutputById, getInfoOutput, createInfoOutput, editInfoOutputById,

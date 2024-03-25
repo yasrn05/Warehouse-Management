@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Comatible" content="IE-edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="http://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/css/style.css">
+    <title>Admin</title>
+</head>
+<body>
+    <section class="top">
+        <div class="container">
+            <div class="row justify-content">
+                <div class="logo"><a href="/"><img src="/images/logo.png" alt="Logo"></a></div>
+                <div class="menu-bar">
+                    <span></span>
+                </div>
+                <div class="menu-items">
+                    <ul>
+                        <li class="menu-item">
+                            <i class='bx bxs-home'></i>
+                            <a href="/">Home</a>
+                        </li>
+                        <li class="menu-item">
+                            <i class='bx bxs-user-account'></i>
+                            <a href="/adminUsers">Users</a>
+                        </li>
+                        <li class="menu-item">
+                            <i class='bx bx-cart'></i>
+                            <a href="/adminPartners">Partners</a>
+                        </li>
+                        <li class="menu-item">
+                            <i class='bx bx-star'></i>
+                            <a href="/adminStars">Stars</a>
+                        </li>
+                        <li class="menu-item">
+                            <i class='bx bx-log-out' ></i>
+                            <a href="/logout">Logout</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="big-image">
+        <div class="big-image-content">
+            <div class="table">
+                <section class="table__header">
+                    <h1>Welcome: <%= admin.name%> - <%= admin.id%></h1>
+                    <h1>Start List</h1>
+                    <div class="input-group">
+                        <input type="search" placeholder="Search Data...">
+                        <img src="images/search.png" alt="">
+                    </div>
+                </section>
+                <section class="table__body">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th> Id <span class="icon-arrow">&UpArrow;</span></th>
+                                <th> Name <span class="icon-arrow">&UpArrow;</span></th>
+                                <th> Role <span class="icon-arrow">&UpArrow;</span></th>
+                                <th> Input Count <span class="icon-arrow">&UpArrow;</span></th>
+                                <th> Output Count <span class="icon-arrow">&UpArrow;</span></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        <% listStars.forEach(function(star) { %>
+                            <tr>
+                                <td><%= star.id %></td>
+                                <td><%= star.name %></td>
+                                <td><%= star.role %></td>
+                                <td><%= star.inputCount %></td>
+                                <td><%= star.outputCount %></td>
+                            </tr>
+                        <% }); %>   
+                        </tbody>
+                    </table>
+                </section>
+            </div>
+        </div>
+    </section>
+    <script src="/js/script.js"></script>
+</body>
+</html>

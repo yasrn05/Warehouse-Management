@@ -2,7 +2,7 @@ const express = require('express')
 const session = require('express-session');
 const {
     getHomePage, getLoginPage, postLogin, getUser, getProfile, getLogout,
-    getAdminUsersPage, postCreateUser, postEditUser, postDeleteUser,
+    getAdminUsersPage, postCreateUser, postEditUser, postDeleteUser, getAdminStarsPage,
     getAdminPartnersPage, postCreatePartner, postEditPartner, postDeletePartner,
     getMangerProductsPage, postCreateProduct, postEditProduct, getManagerInfoProductPage,
     getMangerInputsPage, postCreateInput, postEditInput, getManagerInfoInputPage, postCreateInfoInput, postEditInfoInput,
@@ -31,6 +31,7 @@ router.get('/adminPartners', getAdminPartnersPage)
 router.post('/postCreatePartner', postCreatePartner)
 router.post('/postEditPartner', postEditPartner)
 router.post('/postDeletePartner/:id', postDeletePartner)
+router.get('/adminStars', getAdminStarsPage)
 // Manager
 router.get('/managerProducts', getMangerProductsPage)
 router.post('/postCreateProduct', postCreateProduct)
