@@ -6,8 +6,8 @@ Table database:
 - inputs:
   id, date, idShipper, idManager, idSupplier, address, status
 - inputInfo:
-  id, idProduct, quantity, price, status
+  id, idInput, idProduct, quantity, price, status
 - outputs:
   id, date, idShipper, idManager, idCustomer, address, status
 - outputInfo:
-  id, idProduct, quantity, price, status
+  id, idOutput, idProduct, quantity, price, status
