@@ -37,3 +37,5 @@ Table database:
   id, date, idShipper, idManager, idCustomer, address, status
 - outputInfo:
   id, idOutput, idProduct, quantity, price, status
+- products:
+  id, name, code, category, quantity, description
